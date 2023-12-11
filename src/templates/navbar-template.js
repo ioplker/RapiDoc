@@ -62,7 +62,7 @@ export default function navbarTemplate() {
     `;
   }
   return html`
-  <nav class='nav-bar ${this.renderStyle}' part='section-navbar'>
+  <nav class='nav-bar ${this.renderStyle}' part='section-navbar' style="display:none;">
     <slot name='nav-logo' class='logo'></slot>
     ${(this.allowSearch === 'false' && this.allowAdvancedSearch === 'false')
       ? ''
@@ -218,6 +218,7 @@ export default function navbarTemplate() {
                 part='section-navbar-item section-navbar-path'
                 data-action='navigate'
                 data-content-id='${p.elementId}'
+                data-operation-name='${p.summary}'
                 id='link-${p.elementId}'
                 tabindex='0'
               >
