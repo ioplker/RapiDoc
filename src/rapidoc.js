@@ -1,15 +1,15 @@
 import { css, LitElement, unsafeCSS } from 'lit';
 import { marked } from 'marked';
 import Prism from 'prismjs';
+import 'prismjs/components/prism-markup';
+import 'prismjs/components/prism-markup-templating';
+import 'prismjs/components/prism-php';
+import 'prismjs/components/prism-javascript';
 import 'prismjs/components/prism-css';
-import 'prismjs/components/prism-yaml';
-import 'prismjs/components/prism-go';
-import 'prismjs/components/prism-java';
 import 'prismjs/components/prism-json';
-import 'prismjs/components/prism-bash';
-import 'prismjs/components/prism-python';
+import 'prismjs/components/prism-java';
 import 'prismjs/components/prism-http';
-import 'prismjs/components/prism-csharp';
+import 'prismjs/components/prism-sql';
 
 // Styles
 import FontStyles from '~/styles/font-styles';
