@@ -189,7 +189,9 @@ export default class RapiDoc extends LitElement {
       }
 
       .main-content-inner--view-mode {
-        padding: 0 8px;
+        max-width: var(--MAX-CONTENT-WIDTH-size);
+        margin: 0 auto;
+        padding: 0 20px;
       }
       .main-content::-webkit-scrollbar {
         width: 8px;

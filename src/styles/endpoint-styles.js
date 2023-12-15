@@ -262,7 +262,7 @@ api-response.view-mode {
     padding:16px;
   }
   .summary{
-    padding:8px 16px;
+    padding:8px 12px;
   }
 }
 `;

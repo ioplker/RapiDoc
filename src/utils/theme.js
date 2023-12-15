@@ -287,6 +287,8 @@ export default function setTheme(baseTheme, theme = {}) {
     --code-operator-color:${newTheme.codeOperatorColor};
 
     /* Moneta Styles */
+    --MAX-CONTENT-WIDTH-size: 850px;
+
     --TEXT-WHITE-color: rgba(255, 255, 255, 1);
     --TEXT-DARK-color: rgba(21, 27, 30, 1);
     --TEXT-BLUE-color: rgba(17, 130, 194, 1);
