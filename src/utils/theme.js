@@ -108,8 +108,8 @@ export default function setTheme(baseTheme, theme = {}) {
     const lightFg = theme.fg3 ? theme.fg3 : ColorUtils.color.brightness(fg1, 70); // or #999
     const inlineCodeFg = theme.inlineCodeFg ? theme.inlineCodeFg : 'brown';
 
-    const selectionBg = '#444';
-    const selectionFg = '#eee';
+    const selectionBg = 'rgba(228, 241, 249, 1)';
+    const selectionFg = primaryColor;
 
     const headerColor = theme.headerColor ? theme.headerColor : ColorUtils.color.brightness(bg1, -180);
 
@@ -194,9 +194,9 @@ export default function setTheme(baseTheme, theme = {}) {
   return html`
   <style>
   *, *:before, *:after { box-sizing: border-box; }
-  
+
   :host {
-    /* Common Styles - irrespective of themes */  
+    /* Common Styles - irrespective of themes */
     --border-radius: 2px;
     --layout: ${this.layout || 'row'};
     --font-mono: ${this.monoFont || 'Monaco, "Andale Mono", "Roboto Mono", Consolas, monospace'};
@@ -207,7 +207,7 @@ export default function setTheme(baseTheme, theme = {}) {
     : (this.navItemSpacing === 'compact'
       ? '5px 16px 5px 10px'
       : '7px 16px 7px 10px')};
-    
+
     --resp-area-height: ${this.responseAreaHeight};
     --font-size-small: ${this.fontSize === 'default' ? '12px' : (this.fontSize === 'large' ? '13px' : '14px')};
     --font-size-mono: ${this.fontSize === 'default' ? '13px' : (this.fontSize === 'large' ? '14px' : '15px')};
@@ -216,7 +216,7 @@ export default function setTheme(baseTheme, theme = {}) {
 
     --focus-shadow: 0 0 0 1px transparent, 0 0 0 3px ${newTheme.primaryColorTrans};
 
-    /* Theme specific styles */  
+    /* Theme specific styles */
     --bg:${newTheme.bg1};
     --bg2:${newTheme.bg2};
     --bg3:${newTheme.bg3};
@@ -228,7 +228,7 @@ export default function setTheme(baseTheme, theme = {}) {
     --selection-bg:${newTheme.selectionBg};
     --selection-fg:${newTheme.selectionFg};
     --overlay-bg:${newTheme.overlayBg};
-    
+
     /* Border Colors */
     --border-color:${newTheme.borderColor};
     --light-border-color:${newTheme.lightBorderColor};
@@ -258,7 +258,7 @@ export default function setTheme(baseTheme, theme = {}) {
     --header-color-darker:${newTheme.headerColorDarker};
     --header-color-border:${newTheme.headerColorBorder};
 
-    /* Nav Colors */  
+    /* Nav Colors */
     --nav-bg-color:${newTheme.navBgColor};
     --nav-text-color:${newTheme.navTextColor};
     --nav-hover-bg-color:${newTheme.navHoverBgColor};
@@ -273,18 +273,63 @@ export default function setTheme(baseTheme, theme = {}) {
     --nav-delete-color:${newTheme.red};
     --nav-head-color:${newTheme.yellow};
 
-    /* Primary Colors */  
+    /* Primary Colors */
     --primary-color:${newTheme.primaryColor};
     --primary-color-invert:${newTheme.primaryColorInvert};
     --primary-color-trans:${newTheme.primaryColorTrans};
 
-    /*Code Syntax Color*/
+    /* Code Syntax Color*/
     --code-bg:${newTheme.codeBg};
     --code-fg:${newTheme.codeFg};
     --inline-code-fg:${newTheme.inlineCodeFg};
     --code-property-color:${newTheme.codePropertyColor};
     --code-keyword-color:${newTheme.codeKeywordColor};
     --code-operator-color:${newTheme.codeOperatorColor};
+
+    /* Moneta Styles */
+    --TEXT-WHITE-color: rgba(255, 255, 255, 1);
+    --TEXT-DARK-color: rgba(21, 27, 30, 1);
+    --TEXT-BLUE-color: rgba(17, 130, 194, 1);
+    --TEXT-GREY-color: rgba(135, 137, 146, 1);
+
+    --ICON-WHITE-color: rgba(255, 255, 255, 1);
+    --ICON-DARK-color: rgba(21, 27, 30, 1);
+    --ICON-BLUE-color: rgba(17, 130, 194, 1);
+    --ICON-GREY-color: rgba(135, 137, 146, 1);
+
+    --BORDER-RADIUS-size: 8px;
+
+    --INTERACTIVE-gradient: linear-gradient(96.22deg, #E4F1F9 -15.32%, #E3F1F8 24.39%, #FFF9E7 108.87%, #FFC926 117.85%);
+    --BORDER-gradient: linear-gradient(103.59deg, #1182C2 -4.15%, #7AC493 74.51%, #FFF1BF 110.81%, #FFC926 136.72%);
+    --NOTIFICATION-PANEL-gradient: linear-gradient(91.13deg, #EEF8FE 11.48%, #FFF9E7 164.78%);
+
+    --SURFACE-WHITE-color: rgba(255, 255, 255, 1);
+    --SURFACE-BACKGROUND-color: rgba(244, 246, 248, 1);
+    --SURFACE-BLUE-color: rgba(17, 130, 194, 1);
+    --SURFACE-GREEN-color: rgba(42, 201, 73, 1);
+    --SURFACE-RED-color: rgba(255, 64, 38, 1);
+    --SURFACE-YELLOW-color: rgba(255, 201, 38, 1);
+    --SURFACE-GREY-color: rgba(135, 137, 146, 1);
+    --SURFACE-DARK-color: rgba(21, 27, 30, 1);
+    --SURFACE-DARK-TRANSPARENT-color: rgba(21, 27, 30, 0.4);
+    --SURFACE-LIGHT-BLUE-color: rgba(228, 241, 249, 1);
+    --SURFACE-LIGHT-GREEN-color: rgba(219, 249, 224, 1);
+    --SURFACE-LIGHT-RED-color: rgba(253, 223, 219, 1);
+    --SURFACE-LIGHT-YELLOW-color: rgba(255, 245, 214, 1);
+    --SURFACE-LIGHT-GREY-color: rgba(226, 230, 237, 1);
+  }
+
+  .m-endpoint {
+    border: solid 1px var(--SURFACE-LIGHT-GREY-color);
+    border-radius: var(--BORDER-RADIUS-size);
+  }
+
+  .m-endpoint:not(:first-child) {
+    margin-top: 8px;
+  }
+
+  .m-endpoint > .endpoint-head {
+    padding: 4px !important;
   }
   </style>`;
 }

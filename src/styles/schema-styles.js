@@ -54,7 +54,6 @@ export default css`
   flex-shrink: 1;
   text-overflow: ellipsis;
   overflow: hidden;
-  display: none;
 }
 .expanded-descr .key-descr{
   max-height:auto;

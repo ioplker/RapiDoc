@@ -106,10 +106,28 @@ export default class ApiRequest extends LitElement {
         .read-mode {
           margin-top: 24px;
         }
+        .query-params {
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+          margin-top: 20px;
+        }
+        .param {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          border-bottom: solid 1px var(--SURFACE-LIGHT-GREY-color);
+          padding-bottom: 20px;
+        }
+        .param-title {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 4px;
+          font-weight: 600;
+        }
         .param-name,
         .param-type {
           margin: 1px 0;
-          text-align: right;
           line-height: var(--font-size-small);
         }
         .param-name {
@@ -124,12 +142,25 @@ export default class ApiRequest extends LitElement {
           font-family: var(--font-regular);
         }
         .param-constraint{
-          min-width:100px;
+          display: inline-flex;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 10px;
+          padding: 5px 16px;
+          background: var(--SURFACE-BACKGROUND-color);
+          border-radius: var(--BORDER-RADIUS-size);
         }
         .param-constraint:empty{
           display:none;
         }
+        .param-constraint a {
+          color: var(--primary-color);
+          font-weight: 600;
+        }
         .top-gap{margin-top:24px;}
+        .param [data-example]:not(input) {
+          color: var(--primary-color);
+        }
 
         .textarea {
           min-height:220px; 
@@ -203,7 +234,7 @@ export default class ApiRequest extends LitElement {
     return html`
     <div class="col regular-font request-panel ${'read focused'.includes(this.renderStyle) || this.callback === 'true' ? 'read-mode' : 'view-mode'}">
       <div class=" ${this.callback === 'true' ? 'tiny-title' : 'req-res-title'} "> 
-        ${this.callback === 'true' ? 'CALLBACK REQUEST' : 'REQUEST'}
+        ${this.callback === 'true' ? 'Callback-запрос' : 'Запрос'}
       </div>
       <div>
         ${guard([this.method, this.path, this.allowTry, this.parameters, this.activeParameterSchemaTabs], () => this.inputParametersTemplate('path'))}
@@ -282,7 +313,7 @@ export default class ApiRequest extends LitElement {
         data-example="${example.value && Array.isArray(example.value) ? example.value?.join('~|~') : (typeof example.value === 'object' ? JSON.stringify(example.value, null, 2) : example.value) || ''}"
         title="${example.value && Array.isArray(example.value) ? example.value?.join('~|~') : (typeof example.value === 'object' ? JSON.stringify(example.value, null, 2) : example.value) || ''}"
         @click="${(e) => {
-          const inputEl = e.target.closest('table').querySelector(`[data-pname="${paramName}"]`);
+          const inputEl = e.target.closest('.param').querySelector(`[data-pname="${paramName}"]`);
           if (inputEl) {
             inputEl.value = e.target.dataset.exampleType === 'array' ? e.target.dataset.example.split('~|~') : e.target.dataset.example;
           }
@@ -313,7 +344,7 @@ export default class ApiRequest extends LitElement {
   exampleListTemplate(paramName, paramType, exampleList = []) {
     return html` ${
       exampleList.length > 0
-        ? html`<span style="font-weight:bold">Examples: </span>
+        ? html`<span style="font-weight:bold">Примеры: </span>
           ${anyExampleWithSummaryOrDescription(exampleList)
             ? this.renderLongFormatExamples(exampleList, paramType, paramName)
             : this.renderShortFormatExamples(exampleList, paramType, paramName)}`
@@ -328,16 +359,17 @@ export default class ApiRequest extends LitElement {
     }
     let title = '';
     if (paramType === 'path') {
-      title = 'PATH PARAMETERS';
+      title = 'Path-параметры';
     } else if (paramType === 'query') {
-      title = 'QUERY-STRING PARAMETERS';
+      title = 'Query-параметры';
     } else if (paramType === 'header') {
-      title = 'REQUEST HEADERS';
+      title = 'Заголовки запроса';
     } else if (paramType === 'cookie') {
-      title = 'COOKIES';
+      title = 'Cookies';
     }
 
     const tableRows = [];
+    const params = [];
     for (const param of filteredParams) {
       const [declaredParamSchema, serializeStyle, mimeTypeElem] = getSchemaFromParam(param);
       if (!declaredParamSchema) {
@@ -391,6 +423,58 @@ export default class ApiRequest extends LitElement {
         )[0].exampleValue;
       }
       const labelColWidth = 'read focused'.includes(this.renderStyle) ? '200px' : '160px';
+      params.push(html`
+        <div class="param">
+          <div class="param-title">
+            <div class="param-name ${param.deprecated ? 'deprecated' : ''}" >
+              ${param.deprecated ? html`<span style='color:var(--red);'>✗</span>` : ''}
+              ${param.required ? html`<span style='color:var(--primary-color)'>*</span>` : ''}
+              ${param.name}
+            </div>
+
+            <div class="param-type">
+              ${paramSchema.type === 'array'
+                ? `${paramSchema.arrayType}`
+                : `${paramSchema.format ? paramSchema.format : paramSchema.type}`
+              }
+            </div>
+          </div>
+
+          ${paramSchema.default || paramSchema.constrain || paramSchema.allowedValues || paramSchema.pattern
+            ? html`
+            <div>
+              <div class="param-constraint">
+                ${paramSchema.default ? html`<span style="font-weight:bold">По умолчанию: </span>${paramSchema.default}<br/>` : ''}
+                ${paramSchema.pattern ? html`<span style="font-weight:bold">Шаблон: </span>${paramSchema.pattern}<br/>` : ''}
+                ${paramSchema.constrain ? html`${paramSchema.constrain}<br/>` : ''}
+                ${paramSchema.allowedValues && paramSchema.allowedValues.split('┃').map((v, i) => html`
+                  ${i > 0 ? '' : html`<span>Доступно: </span>`}
+                  ${html`
+                    <a part="anchor anchor-param-constraint" class="inactive-link"
+                      data-type="${paramSchema.type === 'array' ? paramSchema.type : 'string'}"
+                      data-enum="${v.trim()}"
+                      @click="${(e) => {
+                        const inputEl = e.target.closest('.param').querySelector(`[data-pname="${param.name}"]`);
+                        if (inputEl) {
+                          if (e.target.dataset.type === 'array') {
+                            inputEl.value = [e.target.dataset.enum];
+                          } else {
+                            inputEl.value = e.target.dataset.enum;
+                          }
+                        }
+                      }}"
+                    >${v}</a>`
+                  }`)}
+              </div>
+            </div>`
+          : ''
+        }
+          <div colspan="2" style="border:none">
+            <span class="m-markdown-small">${unsafeHTML(marked(param.description || ''))}</span>
+            ${this.exampleListTemplate.call(this, param.name, paramSchema.type, example.exampleList)}
+          </div>
+        </div>
+      `);
       tableRows.push(html`
       <tr title="${param.deprecated ? 'Deprecated' : ''}"> 
         <td rowspan="${this.allowTry === 'true' ? '1' : '2'}" style="width:${labelColWidth}; min-width:100px;">
@@ -406,109 +490,105 @@ export default class ApiRequest extends LitElement {
             }
           </div>
         </td>  
-        ${this.allowTry === 'true'
-          ? html`
-            <td style="min-width:100px;" colspan="${paramSchema.default || paramSchema.constrain || paramSchema.allowedValues || paramSchema.pattern ? '1' : '2'}">
-              ${paramSchema.type === 'array'
-                ? html`
-                  <tag-input class="request-param" 
-                    style = "width:100%" 
-                    data-ptype = "${paramType}"
-                    data-pname = "${param.name}"
-                    data-example = "${Array.isArray(example.exampleVal) ? example.exampleVal.join('~|~') : example.exampleVal}"
-                    data-param-serialize-style = "${paramStyle}"
-                    data-param-serialize-explode = "${paramExplode}"
-                    data-param-allow-reserved = "${paramAllowReserved}"
-                    data-x-fill-example = "${param['x-fill-example'] || 'yes'}"
-                    data-array = "true"
-                    placeholder = "add-multiple &#x21a9;"
-                    .value="${param['x-fill-example'] === 'no'
-                      ? []
-                      : live(this.fillRequestFieldsWithExample === 'true' ? Array.isArray(example.exampleVal) ? example.exampleVal : [example.exampleVal] : [])
-                    }"
-                  >
-                  </tag-input>`
-                : paramSchema.type === 'object'
-                  ? html`
-                    <div class="tab-panel col" style="border-width:0 0 1px 0;">
-                      <div class="tab-buttons row" @click="${(e) => {
-                        if (e.target.tagName.toLowerCase() === 'button') {
-                          const newState = { ...this.activeParameterSchemaTabs };
-                          newState[param.name] = e.target.dataset.tab;
-                          this.activeParameterSchemaTabs = newState;
-                        }
-                      }}">
-                        <button class="tab-btn ${this.activeParameterSchemaTabs[param.name] === 'example' ? 'active' : ''}" data-tab = 'example'>EXAMPLE </button>
-                        <button class="tab-btn ${this.activeParameterSchemaTabs[param.name] !== 'example' ? 'active' : ''}" data-tab = 'schema'>SCHEMA</button>
-                      </div>
-                      ${this.activeParameterSchemaTabs[param.name] === 'example'
-                        ? html`<div class="tab-content col">
-                          <textarea 
-                            class = "textarea request-param"
-                            part = "textarea textarea-param"
-                            data-ptype = "${paramType}-object"
-                            data-pname = "${param.name}"
-                            data-example = "${example.exampleVal}"
-                            data-param-serialize-style = "${paramStyle}"
-                            data-param-serialize-explode = "${paramExplode}"
-                            data-param-allow-reserved = "${paramAllowReserved}"
-                            data-x-fill-example = "${param['x-fill-example'] || 'yes'}"
-                            spellcheck = "false"
-                            .textContent="${param['x-fill-example'] === 'no' ? '' : live(this.fillRequestFieldsWithExample === 'true' ? (typeof example.exampleVal === 'object' ? JSON.stringify(example.exampleVal, null, 2) : example.exampleVal) : '')}"
-                            style = "resize:vertical; width:100%; height: ${'read focused'.includes(this.renderStyle) ? '180px' : '120px'};"
-                            @input=${(e) => {
-                              const requestPanelEl = this.getRequestPanel(e);
-                              this.liveCURLSyntaxUpdate(requestPanelEl);
-                            }}
-                          ></textarea>
-                        </div>`
-                        : html`
-                          <div class="tab-content col">
-                            <schema-tree
-                              class = 'json'
-                              style = 'display: block'
-                              .data = '${schemaAsObj}'
-                              schema-expand-level = "${this.schemaExpandLevel}"
-                              schema-description-expanded = "${this.schemaDescriptionExpanded}"
-                              allow-schema-description-expand-toggle = "${this.allowSchemaDescriptionExpandToggle}"
-                              schema-hide-read-only = "${this.schemaHideReadOnly.includes(this.method)}"
-                              schema-hide-write-only = "${this.schemaHideWriteOnly.includes(this.method)}"
-                              exportparts = "wrap-request-btn:wrap-request-btn, btn:btn, btn-fill:btn-fill, btn-outline:btn-outline, btn-try:btn-try, btn-clear:btn-clear, btn-clear-resp:btn-clear-resp,
-                                file-input:file-input, textbox:textbox, textbox-param:textbox-param, textarea:textarea, textarea-param:textarea-param, 
-                                anchor:anchor, anchor-param-example:anchor-param-example"
-                            > </schema-tree>
-                          </div>`
-                        }
+        <td style="min-width:100px;" colspan="${paramSchema.default || paramSchema.constrain || paramSchema.allowedValues || paramSchema.pattern ? '1' : '2'}">
+          ${paramSchema.type === 'array'
+            ? html`
+              <tag-input class="request-param"
+                style = "width:100%"
+                data-ptype = "${paramType}"
+                data-pname = "${param.name}"
+                data-example = "${Array.isArray(example.exampleVal) ? example.exampleVal.join('~|~') : example.exampleVal}"
+                data-param-serialize-style = "${paramStyle}"
+                data-param-serialize-explode = "${paramExplode}"
+                data-param-allow-reserved = "${paramAllowReserved}"
+                data-x-fill-example = "${param['x-fill-example'] || 'yes'}"
+                data-array = "true"
+                placeholder = "add-multiple &#x21a9;"
+                .value="${param['x-fill-example'] === 'no'
+                  ? []
+                  : live(this.fillRequestFieldsWithExample === 'true' ? Array.isArray(example.exampleVal) ? example.exampleVal : [example.exampleVal] : [])
+                }"
+              >
+              </tag-input>`
+            : paramSchema.type === 'object'
+              ? html`
+                <div class="tab-panel col" style="border-width:0 0 1px 0;">
+                  <div class="tab-buttons row" @click="${(e) => {
+                    if (e.target.tagName.toLowerCase() === 'button') {
+                      const newState = { ...this.activeParameterSchemaTabs };
+                      newState[param.name] = e.target.dataset.tab;
+                      this.activeParameterSchemaTabs = newState;
+                    }
+                  }}">
+                    <button class="tab-btn ${this.activeParameterSchemaTabs[param.name] === 'example' ? 'active' : ''}" data-tab = 'example'>Пример</button>
+                    <button class="tab-btn ${this.activeParameterSchemaTabs[param.name] !== 'example' ? 'active' : ''}" data-tab = 'schema'>Схема</button>
+                  </div>
+                  ${this.activeParameterSchemaTabs[param.name] === 'example'
+                    ? html`<div class="tab-content col">
+                      <textarea
+                        class = "textarea request-param"
+                        part = "textarea textarea-param"
+                        data-ptype = "${paramType}-object"
+                        data-pname = "${param.name}"
+                        data-example = "${example.exampleVal}"
+                        data-param-serialize-style = "${paramStyle}"
+                        data-param-serialize-explode = "${paramExplode}"
+                        data-param-allow-reserved = "${paramAllowReserved}"
+                        data-x-fill-example = "${param['x-fill-example'] || 'yes'}"
+                        spellcheck = "false"
+                        .textContent="${param['x-fill-example'] === 'no' ? '' : live(this.fillRequestFieldsWithExample === 'true' ? (typeof example.exampleVal === 'object' ? JSON.stringify(example.exampleVal, null, 2) : example.exampleVal) : '')}"
+                        style = "resize:vertical; width:100%; height: ${'read focused'.includes(this.renderStyle) ? '180px' : '120px'};"
+                        @input=${(e) => {
+                          const requestPanelEl = this.getRequestPanel(e);
+                          this.liveCURLSyntaxUpdate(requestPanelEl);
+                        }}
+                      ></textarea>
                     </div>`
-                  : html`
-                    <input type="${paramSchema.format === 'password' ? 'password' : 'text'}" spellcheck="false" style="width:100%" 
-                      class="request-param"
-                      part="textbox textbox-param"
-                      data-ptype="${paramType}"
-                      data-pname="${param.name}" 
-                      data-example="${Array.isArray(example.exampleVal) ? example.exampleVal.join('~|~') : example.exampleVal}"
-                      data-param-allow-reserved = "${paramAllowReserved}"
-                      data-x-fill-example = "${param['x-fill-example'] || 'yes'}"
-                      data-array="false"
-                      .value="${param['x-fill-example'] === 'no' ? '' : live(this.fillRequestFieldsWithExample === 'true' ? example.exampleVal : '')}"
-                      @input=${(e) => {
-                        const requestPanelEl = this.getRequestPanel(e);
-                        this.liveCURLSyntaxUpdate(requestPanelEl);
-                      }}
-                    />`
-                }
-            </td>`
-          : ''
-        }
+                    : html`
+                      <div class="tab-content col">
+                        <schema-tree
+                          class = 'json'
+                          style = 'display: block'
+                          .data = '${schemaAsObj}'
+                          schema-expand-level = "${this.schemaExpandLevel}"
+                          schema-description-expanded = "${this.schemaDescriptionExpanded}"
+                          allow-schema-description-expand-toggle = "${this.allowSchemaDescriptionExpandToggle}"
+                          schema-hide-read-only = "${this.schemaHideReadOnly.includes(this.method)}"
+                          schema-hide-write-only = "${this.schemaHideWriteOnly.includes(this.method)}"
+                          exportparts = "wrap-request-btn:wrap-request-btn, btn:btn, btn-fill:btn-fill, btn-outline:btn-outline, btn-try:btn-try, btn-clear:btn-clear, btn-clear-resp:btn-clear-resp,
+                            file-input:file-input, textbox:textbox, textbox-param:textbox-param, textarea:textarea, textarea-param:textarea-param,
+                            anchor:anchor, anchor-param-example:anchor-param-example"
+                        > </schema-tree>
+                      </div>`
+                    }
+                </div>`
+              : html`
+                <input type="${paramSchema.format === 'password' ? 'password' : 'text'}" spellcheck="false" style="width:100%"
+                  class="request-param"
+                  part="textbox textbox-param"
+                  data-ptype="${paramType}"
+                  data-pname="${param.name}"
+                  data-example="${Array.isArray(example.exampleVal) ? example.exampleVal.join('~|~') : example.exampleVal}"
+                  data-param-allow-reserved = "${paramAllowReserved}"
+                  data-x-fill-example = "${param['x-fill-example'] || 'yes'}"
+                  data-array="false"
+                  .value="${param['x-fill-example'] === 'no' ? '' : live(this.fillRequestFieldsWithExample === 'true' ? example.exampleVal : '')}"
+                  @input=${(e) => {
+                    const requestPanelEl = this.getRequestPanel(e);
+                    this.liveCURLSyntaxUpdate(requestPanelEl);
+                  }}
+                />`
+            }
+        </td>
         ${paramSchema.default || paramSchema.constrain || paramSchema.allowedValues || paramSchema.pattern
           ? html`
             <td colspan="${(this.allowTry === 'true') ? '1' : '2'}">
               <div class="param-constraint">
-                ${paramSchema.default ? html`<span style="font-weight:bold">Default: </span>${paramSchema.default}<br/>` : ''}
-                ${paramSchema.pattern ? html`<span style="font-weight:bold">Pattern: </span>${paramSchema.pattern}<br/>` : ''}
+                ${paramSchema.default ? html`<span style="font-weight:bold">По умолчанию: </span>${paramSchema.default}<br/>` : ''}
+                ${paramSchema.pattern ? html`<span style="font-weight:bold">Шаблон: </span>${paramSchema.pattern}<br/>` : ''}
                 ${paramSchema.constrain ? html`${paramSchema.constrain}<br/>` : ''}
                 ${paramSchema.allowedValues && paramSchema.allowedValues.split('┃').map((v, i) => html`
-                  ${i > 0 ? '┃' : html`<span style="font-weight:bold">Allowed: </span>`}
+                  ${i > 0 ? '┃' : html`<span style="font-weight:bold">Доступно: </span>`}
                   ${html`
                     <a part="anchor anchor-param-constraint" class = "${this.allowTry === 'true' ? '' : 'inactive-link'}"
                       data-type="${paramSchema.type === 'array' ? paramSchema.type : 'string'}"
@@ -543,11 +623,12 @@ export default class ApiRequest extends LitElement {
     return html`
     <div class="table-title top-gap">${title}</div>
     <div style="display:block; overflow-x:auto; max-width:100%;">
-      <table role="presentation" class="m-table" style="width:100%; word-break:break-word;">
-        ${tableRows}
-      </table>
+      <div class="query-params">${params}</div>
     </div>`;
   }
+      // <table role="presentation" class="m-table" style="width:100%; word-break:break-word;">
+      //   ${tableRows}
+      // </table>
 
   // This method is called before navigation change in focused mode
   async beforeNavigationFocusedMode() {
@@ -621,7 +702,7 @@ export default class ApiRequest extends LitElement {
     reqBodyTypeSelectorHtml = requestBodyTypes.length === 1
       ? ''
       : html`
-        <select style="min-width:100px; max-width:100%;  margin-bottom:-1px;" @change = '${(e) => this.onMimeTypeChange(e)}'>
+        <select style="min-width:100px; max-width:100%;" @change = '${(e) => this.onMimeTypeChange(e)}'>
           ${requestBodyTypes.map((reqBody) => html`
             <option value = '${reqBody.mimeType}' ?selected = '${reqBody.mimeType === this.selectedRequestBodyType}'>
               ${reqBody.mimeType}
@@ -653,7 +734,7 @@ export default class ApiRequest extends LitElement {
           }
           reqBodyExampleHtml = html`
             ${reqBodyExampleHtml}
-            <div class = 'example-panel border-top pad-top-8'>
+            <div class = 'example-panel pad-top-8'>
               ${reqBodyExamples.length === 1
                 ? ''
                 : html`
@@ -686,7 +767,7 @@ export default class ApiRequest extends LitElement {
                     data-ptype = "${reqBody.mimeType}" 
                     data-example = "${v.exampleFormat === 'text' ? v.exampleValue : JSON.stringify(v.exampleValue, null, 2)}"
                     data-example-format = "${v.exampleFormat}"
-                    style="width:100%; resize:vertical;"
+          style="width:100%; resize:vertical; border-radius:8px;"
                     .textContent = "${this.fillRequestFieldsWithExample === 'true' ? (v.exampleFormat === 'text' ? v.exampleValue : JSON.stringify(v.exampleValue, null, 2)) : ''}"
                     @input=${(e) => {
                       const requestPanelEl = this.getRequestPanel(e);
@@ -765,7 +846,7 @@ export default class ApiRequest extends LitElement {
     return html`
       <div class='request-body-container' data-selected-request-body-type="${this.selectedRequestBodyType}">
         <div class="table-title top-gap row">
-          REQUEST BODY ${this.request_body.required ? html`<span class="mono-font" style='color:var(--red)'>*</span>` : ''} 
+          Тело запроса ${this.request_body.required ? html`<span class="mono-font" style='color:var(--red)'>*</span>` : ''}
           <span style = "font-weight:normal; margin-left:5px"> ${this.selectedRequestBodyType}</span>
           <span style="flex:1"></span>
           ${reqBodyTypeSelectorHtml}
@@ -776,8 +857,8 @@ export default class ApiRequest extends LitElement {
           ? html`
             <div class="tab-panel col" style="border-width:0 0 1px 0;">
               <div class="tab-buttons row" @click="${(e) => { if (e.target.tagName.toLowerCase() === 'button') { this.activeSchemaTab = e.target.dataset.tab; } }}">
-                <button class="tab-btn ${this.activeSchemaTab === 'example' ? 'active' : ''}" data-tab = 'example'>EXAMPLE</button>
-                <button class="tab-btn ${this.activeSchemaTab !== 'example' ? 'active' : ''}" data-tab = 'schema'>SCHEMA</button>
+                <button class="tab-btn ${this.activeSchemaTab === 'example' ? 'active' : ''}" data-tab = 'example'>Пример</button>
+                <button class="tab-btn ${this.activeSchemaTab !== 'example' ? 'active' : ''}" data-tab = 'schema'>Схема</button>
               </div>
               ${html`<div class="tab-content col" style="display:${this.activeSchemaTab === 'example' ? 'block' : 'none'};"> ${reqBodyExampleHtml}</div>`}
               ${html`<div class="tab-content col" style="display:${this.activeSchemaTab === 'example' ? 'none' : 'block'};"> ${reqBodySchemaHtml}</div>`}
@@ -941,11 +1022,11 @@ export default class ApiRequest extends LitElement {
                 ${paramSchema.default || paramSchema.constrain || paramSchema.allowedValues || paramSchema.pattern
                   ? html`
                     <div class="param-constraint">
-                      ${paramSchema.default ? html`<span style="font-weight:bold">Default: </span>${paramSchema.default}<br/>` : ''}
-                      ${paramSchema.pattern ? html`<span style="font-weight:bold">Pattern: </span>${paramSchema.pattern}<br/>` : ''}
+                      ${paramSchema.default ? html`<span style="font-weight:bold">По умолчанию: </span>${paramSchema.default}<br/>` : ''}
+                      ${paramSchema.pattern ? html`<span style="font-weight:bold">Шаблон: </span>${paramSchema.pattern}<br/>` : ''}
                       ${paramSchema.constrain ? html`${paramSchema.constrain}<br/>` : ''}
                       ${paramSchema.allowedValues && paramSchema.allowedValues.split('┃').map((v, i) => html`
-                        ${i > 0 ? '┃' : html`<span style="font-weight:bold">Allowed: </span>`}
+                        ${i > 0 ? '┃' : html`<span style="font-weight:bold">Доступно: </span>`}
                         ${html`
                           <a part="anchor anchor-param-constraint" class = "${this.allowTry === 'true' ? '' : 'inactive-link'}"
                             data-type="${paramSchema.type === 'array' ? paramSchema.type : 'string'}"

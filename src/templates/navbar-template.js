@@ -177,7 +177,7 @@ export default function navbarTemplate() {
                   part='section-navbar-item section-navbar-tag'
                   id='link-${tag.elementId}'
                   data-action='${(this.renderStyle === 'read' ? 'navigate' : this.onNavTagClick === 'show-description') ? 'navigate' : 'expand-collapse-tag'}'
-                  data-content-id='${(this.renderStyle === 'read' ? `${tag.elementId}` : this.onNavTagClick === 'show-description') ? `${tag.elementId}` : ''}'
+                  data-content-id='${(this.renderStyle === 'read' || this.renderStyle === 'view' ? `${tag.elementId}` : this.onNavTagClick === 'show-description') ? `${tag.elementId}` : ''}'
                   data-first-path-id='${tag.firstPathId}'
                   tabindex='0'
                 >

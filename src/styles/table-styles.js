@@ -55,4 +55,12 @@ export default css`
   vertical-align: middle;
   margin: 12px 0 4px 0;
 }
+.code-samples-title {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 24px;
+}
+.code-samples-title + .tab-panel {
+  margin-top: 12px;
+}
 `;

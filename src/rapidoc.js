@@ -203,7 +203,7 @@ export default class RapiDoc extends LitElement {
       }
 
       .section-gap.section-tag {
-        border-bottom:1px solid var(--border-color);
+        padding-bottom: 12px;
       }
       .section-gap,
       .section-gap--focused-mode,
@@ -212,36 +212,44 @@ export default class RapiDoc extends LitElement {
       }
       .section-tag-header {
         position:relative;
-        cursor: n-resize;
-        padding: 12px 0;
+        padding: 12px 5px 12px 8px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
       }
-      .collapsed .section-tag-header:hover{
-        cursor: s-resize;
+      .section-tag-header .icon {
+        --STROKE-local: var(--ICON-GREY-color);
+        width: 24px;
+        height: 24px;
       }
-
+      .section-tag.collapsed .section-tag-header .icon.close { display: none;}
+      .section-tag.expanded .section-tag-header .icon.open { display: none;}
       .section-tag-header:hover{
-        background-image: linear-gradient(to right, rgba(0,0,0,0), var(--border-color), rgba(0,0,0,0));
+        background: var(--SURFACE-BACKGROUND-color);
       }
 
-      .section-tag-header:hover::after {
-        position:absolute;
-        margin-left:-24px;
-        font-size:20px;
-        top: calc(50% - 14px);
-        color:var(--primary-color);
-        content: '⬆'; 
+      .section-tag .section-tag-header {
+        border: solid 1px;
+        border-bottom: none;
+        border-radius: 8px 8px 0 0;
+        border-color: transparent;
       }
 
-      .collapsed .section-tag-header::after {
-        position:absolute;
-        margin-left:-24px;
-        font-size:20px;
-        top: calc(50% - 14px);
-        color: var(--border-color);
-        content: '⬇'; 
+      .section-tag.expanded .section-tag-header:hover {
+        border-color: var(--SURFACE-BACKGROUND-color);
       }
-      .collapsed .section-tag-header:hover::after {
-        color:var(--primary-color);
+
+      .section-tag.expanded .section-tag-header:hover + .section-tag-body {
+        border-color: var(--SURFACE-BACKGROUND-color);
+      }
+
+      .section-tag .section-tag-body {
+        border: solid 1px;
+        border-top: none;
+        border-color: transparent;
+        border-radius: 0 0 8px 8px;
       }
 
       .collapsed .section-tag-body {
@@ -384,9 +392,6 @@ export default class RapiDoc extends LitElement {
         }
         .only-large-screen-flex{
           display:flex;
-        }
-        .section-gap { 
-          padding: 0 0 0 24px; 
         }
         .section-gap--focused-mode {
           padding: 24px 8px; 

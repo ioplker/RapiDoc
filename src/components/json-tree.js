@@ -27,15 +27,18 @@ export default class JsonTree extends LitElement {
       .json-tree {
         position: relative;
         font-family: var(--font-mono);
-        font-size: var(--font-size-small);
+        font-size:var(--font-size-small);
         display:inline-block;
         overflow:hidden;
         word-break: break-all;
         flex:1;
         line-height: calc(var(--font-size-small) + 6px);
         min-height: 40px;
-        direction: ltr; 
+        direction: ltr;
         text-align: left;
+        padding: 12px;
+        background: var(--SURFACE-BACKGROUND-color);
+        border-radius: var(--BORDER-RADIUS-size);
       }
 
       .open-bracket {
@@ -83,7 +86,34 @@ export default class JsonTree extends LitElement {
         display:flex;
         padding:2px;
         align-items: center;
-      }`,
+      }
+
+      .btn-copy .icon {
+        pointer-events: none;
+      }
+
+      .json-tree:hover .copy-code-btn {
+        display: flex;
+      }
+      .copy-code-btn {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        background: var(--SURFACE-WHITE-color);
+        width: 40px;
+        min-width: 40px;
+        height: 40px;
+        padding: 0;
+        margin: 0;
+      }
+      .copy-code-btn .icon {
+        --STROKE-local: var(--ICON-DARK-color);
+        width: 24px;
+        height: 24px;
+        pointer-events: none;
+      }
+      `,
       CustomStyles,
     ];
   }
@@ -93,7 +123,12 @@ export default class JsonTree extends LitElement {
     return html`
       <div class = "json-tree"  @click='${(e) => { if (e.target.classList.contains('btn-copy')) { copyToClipboard(JSON.stringify(this.data, null, 2), e); } else { this.toggleExpand(e); } }}'>
         <div class='toolbar'> 
-          <button class="toolbar-btn btn-copy" part="btn btn-fill btn-copy"> Copy </button>
+          <button class="toolbar-btn btn-copy copy-code-btn" part="btn btn-fill btn-copy">
+            <svg class="icon" style="stroke: var(--STROKE-local);" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 6.82353H6C5.44772 6.82353 5 7.24491 5 7.76471V19.0588C5 19.5786 5.44771 20 6 20H15C15.5523 20 16 19.5786 16 19.0588V17.1765M8 6.82353H15C15.5523 6.82353 16 7.24491 16 7.76471V17.1765M8
+              6.82353V4.94118C8 4.42138 8.44772 4 9 4H18C18.5523 4 19 4.42138 19 4.94118V16.2353C19 16.7551 18.5523 17.1765 18 17.1765H16" stroke-width="1.5"/>
+            </svg>
+          </button>
         </div>
           ${this.generateTree(this.data, true)}
       </div>  

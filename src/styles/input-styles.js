@@ -7,18 +7,22 @@ export default css`
   border-radius: var(--border-radius);
   font-weight: 600;
   display: inline-block;
-  padding: 6px 16px;
-  font-size: var(--font-size-small);
+  padding: 11px 24px;
+  font-size: 16px;
   outline: 0;
-  line-height: 1;
+  font-weight: 600;
+  line-height: 18px;
   text-align: center;
   white-space: nowrap;
   border: 2px solid var(--primary-color);
+  border-radius: var(--BORDER-RADIUS-size);
   background-color:transparent;
   transition: background-color 0.2s;
   user-select: none;
   cursor: pointer;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+.m-btn:not(.primary) {
+  color: var(--primary-color);
 }
 .m-btn.primary {
   background-color: var(--primary-color);
@@ -26,7 +30,6 @@ export default css`
 }
 .m-btn.thin-border { border-width: 1px; }
 .m-btn.large { padding:8px 14px; }
-.m-btn.small { padding:5px 12px; }
 .m-btn.tiny { padding:5px 6px; }
 .m-btn.circle { border-radius: 50%; }
 .m-btn:hover { 
@@ -79,6 +82,7 @@ input[type="password"] {
   font-size: var(--font-size-small);
   transition: border .2s;
   padding: 6px 5px;
+  border-radius: var(--BORDER-RADIUS-size);
 }
 
 select {

@@ -71,7 +71,6 @@ export default class ApiResponse extends LitElement {
       }
       .top-gap{margin-top:16px;}
       .example-panel{
-        font-size:var(--font-size-small);
         margin:0;
       }
       .focused-mode,
@@ -88,7 +87,7 @@ export default class ApiResponse extends LitElement {
     return html`
     <div class="col regular-font response-panel ${this.renderStyle}-mode">
       <div class=" ${this.callback === 'true' ? 'tiny-title' : 'req-res-title'} "> 
-        ${this.callback === 'true' ? 'CALLBACK RESPONSE' : 'RESPONSE'}
+        ${this.callback === 'true' ? 'Ответ на callback' : 'Ответ'}
       </div>
       <div>
         ${this.responseTemplate()}
@@ -184,8 +183,8 @@ export default class ApiResponse extends LitElement {
             : html`  
               <div class="tab-panel col">
                 <div class="tab-buttons row" @click="${(e) => { if (e.target.tagName.toLowerCase() === 'button') { this.activeSchemaTab = e.target.dataset.tab; } }}" >
-                  <button class="tab-btn ${this.activeSchemaTab === 'example' ? 'active' : ''}" data-tab = 'example'>EXAMPLE </button>
-                  <button class="tab-btn ${this.activeSchemaTab !== 'example' ? 'active' : ''}" data-tab = 'schema' >SCHEMA</button>
+                  <button class="tab-btn ${this.activeSchemaTab === 'example' ? 'active' : ''}" data-tab = 'example'>Пример</button>
+                  <button class="tab-btn ${this.activeSchemaTab !== 'example' ? 'active' : ''}" data-tab = 'schema' >Схема</button>
                   <div style="flex:1"></div>
                   ${Object.keys(this.mimeResponsesForEachStatus[status]).length === 1
                     ? html`<span class='small-font-size gray-text' style='align-self:center; margin-top:8px;'> ${Object.keys(this.mimeResponsesForEachStatus[status])[0]} </span>`
@@ -258,11 +257,11 @@ export default class ApiResponse extends LitElement {
           ${mimeRespDetails.examples[0].exampleFormat === 'json'
             ? html`
               ${mimeRespDetails.examples[0].exampleSummary && mimeRespDetails.examples[0].exampleSummary.length > 80 ? html`<div style="padding: 4px 0"> ${mimeRespDetails.examples[0].exampleSummary} </div>` : ''}
-              ${mimeRespDetails.examples[0].exampleDescription ? html`<div class="m-markdown-small" style="padding: 4px 0"> ${unsafeHTML(marked(mimeRespDetails.examples[0].exampleDescription || ''))} </div>` : ''}
+              ${mimeRespDetails.examples[0].exampleDescription ? html`<div class="m-markdown" style="padding: 4px 0"> ${unsafeHTML(marked(mimeRespDetails.examples[0].exampleDescription || ''))} </div>` : ''}
               <json-tree 
                 render-style = '${this.renderStyle}'
                 .data="${mimeRespDetails.examples[0].exampleValue}"
-                class = 'example-panel ${this.renderStyle === 'read' ? 'border pad-8-16' : 'border-top pad-top-8'}'
+                class = 'example-panel ${this.renderStyle === 'read' ? 'border pad-8-16' : ' pad-top-8'}'
                 exportparts = "btn:btn, btn-fill:btn-fill, btn-copy:btn-copy" 
               ></json-tree>`
             : html`

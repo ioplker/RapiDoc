@@ -18,8 +18,7 @@ export function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export function copyToClipboard(data, e) {
-  const btnEl = e.target;
+export function copyToClipboard(data) {
   const textArea = document.createElement('textarea');
   textArea.value = data;
   textArea.style.position = 'fixed'; // avoid scrolling to bottom
@@ -28,10 +27,6 @@ export function copyToClipboard(data, e) {
   textArea.select();
   try {
     document.execCommand('copy');
-    btnEl.innerText = 'Copied';
-    setTimeout(() => {
-      btnEl.innerText = 'Copy';
-    }, 5000);
   } catch (err) {
     console.error('Unable to copy', err); // eslint-disable-line no-console
   }

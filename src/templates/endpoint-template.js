@@ -45,9 +45,10 @@ function onExpandCollapseAll(e, action = 'expand-all') {
 
 /* eslint-disable indent */
 function endpointHeadTemplate(path, pathsExpanded = false) {
+  const icon = html`<svg class="icon" style="stroke: var(--STROKE-local);" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 7L20 12L15 17M9 17L4 12L9 7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
   return html`
   <summary @click="${(e) => { toggleExpand.call(this, path, e); }}" part="section-endpoint-head-${path.expanded ? 'expanded' : 'collapsed'}" class='endpoint-head ${path.method} ${path.deprecated ? 'deprecated' : ''} ${pathsExpanded || path.expanded ? 'expanded' : 'collapsed'}'>
-    <div part="section-endpoint-head-method" class="method ${path.method} ${path.deprecated ? 'deprecated' : ''}"> ${path.method} </div> 
+    <div part="section-endpoint-head-method" class="method ${path.method} ${path.deprecated ? 'deprecated' : ''}"> ${icon} ${path.method} </div>
     <div  part="section-endpoint-head-path" class="path ${path.deprecated ? 'deprecated' : ''}"> 
       ${path.path} 
       ${path.isWebhook ? html`<span style="font-family: var(--font-regular); font-size: var(--); font-size: var(--font-size-small); color:var(--primary-color); margin-left: 16px"> Webhook</span>` : ''}
@@ -61,8 +62,12 @@ function endpointHeadTemplate(path, pathsExpanded = false) {
     }
     ${this.showSummaryWhenCollapsed
       ? html`
-        <div class="only-large-screen" style="min-width:60px; flex:1"></div>
-        <div part="section-endpoint-head-description" class="descr">${path.summary || path.shortSummary} </div>`
+        <div style="min-width:60px; flex:1"></div>
+        <div part="section-endpoint-head-description" class="descr">${path.summary || path.shortSummary} </div>
+        <div class="collapse-btns">
+          <svg class="icon open" style="stroke: var(--STROKE-local);" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g><path d="M19 9L12 16L5 9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
+          <svg class="icon close" style="stroke: var(--STROKE-local);" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g><path d="M5 16L12 9L19 16" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
+        </div>`
       : ''
     }
   </summary>
@@ -205,6 +210,8 @@ export default function endpointTemplate(showExpandCollapse = true, showTags = t
           <div class='regular-font section-gap section-tag ${tag.expanded ? 'expanded' : 'collapsed'}'> 
             <div class='section-tag-header' @click="${() => { tag.expanded = !tag.expanded; this.requestUpdate(); }}">
               <div id='${tag.elementId}' class="sub-title tag" style="color:var(--primary-color)">${tag.name}</div>
+              <svg class="icon open" style="stroke: var(--STROKE-local);" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g><path d="M19 9L12 16L5 9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
+              <svg class="icon close" style="stroke: var(--STROKE-local);" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g><path d="M5 16L12 9L19 16" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
             </div>
             <div class='section-tag-body'>
               <slot name="${tag.elementId}"></slot>
@@ -218,6 +225,9 @@ export default function endpointTemplate(showExpandCollapse = true, showTags = t
                 return true;
                 }).map((path) => html`
                 <section part="section-endpoint" id='${path.elementId}' class='m-endpoint regular-font ${path.method} ${pathsExpanded || path.expanded ? 'expanded' : 'collapsed'}'>
+                  <div class="border-bg">
+                    <div class="bg"></div>
+                  </div>
                   ${endpointHeadTemplate.call(this, path, pathsExpanded)}      
                   ${pathsExpanded || path.expanded ? endpointBodyTemplate.call(this, path) : ''}
                 </section>`)

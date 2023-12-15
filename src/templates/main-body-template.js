@@ -76,7 +76,7 @@ export default function mainBodyTemplate(isMini = false, showExpandCollapse = tr
 
     <div id='the-main-body' class='body ${this.cssClasses}' dir='${this.pageDirection}' >
       <!-- Side Nav -->
-      ${((this.renderStyle === 'read' || this.renderStyle === 'focused')
+      ${((this.renderStyle === 'read' || this.renderStyle === 'view' || this.renderStyle === 'focused')
           && this.showSideNav === 'true'
           && this.resolvedSpec
         ) ? navbarTemplate.call(this) : ''

@@ -30,21 +30,59 @@ export default class SchemaTable extends LitElement {
       FontStyles,
       SchemaStyles,
       css`
+      .wrapper {
+        border: 1px solid var(--SURFACE-LIGHT-GREY-color);
+        border-radius: var(--BORDER-RADIUS-size);
+        overflow-x: auto;
+      }
+      .wrapper .header {
+        display:flex;
+        padding: 0;
+        border-radius: var(--BORDER-RADIUS-size);
+      }
+      .wrapper .header * {
+        font-family:var(--font-regular);
+        font-weight:600;
+        color:var(--TEXT-GREY-color);
+        background-color: var(--bg2);
+       }
+      .wrapper .header .key {
+        padding: 7px 12px 7px 12px;
+      }
+      .wrapper .header .key-type {
+        padding: 7px 12px;
+        border-left: solid 1px var(--SURFACE-LIGHT-GREY-color);
+        border-right: solid 1px var(--SURFACE-LIGHT-GREY-color);
+       }
+      .wrapper .header .key-descr {
+        padding: 7px 12px;
+      }
+      .wrapper .td.key-type {
+        border-left: solid 1px var(--SURFACE-LIGHT-GREY-color);
+        border-right: solid 1px var(--SURFACE-LIGHT-GREY-color);
+      }
+      .wrapper .td.key-type,
+      .wrapper .td.key-descr {
+        padding: 5px 12px;
+      }
+
       .table {
         font-size: var(--font-size-small);
         text-align: left;
         line-height: calc(var(--font-size-small) + 6px);
       }
       .table .tr {
-        width: calc(100% - 5px);
-        padding: 0 0 0 5px;
-        border-bottom: 1px dotted var(--light-border-color);
+        padding: 0;
       }
       .table .td {
         padding: 4px 0;
+        overflow: hidden;
+        border-top: solid 1px var(--SURFACE-LIGHT-GREY-color);
       }
       .table .key {
         width: 240px;
+        min-width: 240px;
+        padding-left: 12px;
       }
       .key .key-label {
         font-size: var(--font-size-mono);
@@ -56,7 +94,15 @@ export default class SchemaTable extends LitElement {
       .table .key-type {
         white-space: normal;
         width: 150px;
+        min-width: 150px;
+        word-break: break-all;
       }
+
+      .table .key-descr {
+        min-width: 240px;
+        width: 100%;
+      }
+
       .collapsed-all-descr .tr:not(.expanded-descr) {
         max-height: calc(var(--font-size-small) + var(--font-size-small));
       }
@@ -96,18 +142,18 @@ export default class SchemaTable extends LitElement {
             ? html`
               <div style="flex:1"></div>
               <div part="schema-multiline-toggle" class='toolbar-item schema-multiline-toggle' > 
-                ${this.schemaDescriptionExpanded === 'true' ? 'Single line description' : 'Multiline description'}
+                ${this.schemaDescriptionExpanded === 'true' ? 'В одну строку' : 'В несколько строк'}
               </div>
             `
             : ''
           }
         </div>
-        <span part="schema-description" class='m-markdown'> ${unsafeHTML(marked(this.data?.['::description'] || ''))} </span>
-        <div style = 'border:1px solid var(--light-border-color)'>
-          <div style='display:flex; background-color: var(--bg2); padding:8px 4px; border-bottom:1px solid var(--light-border-color);'>
-            <div class='key' style='font-family:var(--font-regular); font-weight:bold; color:var(--fg);'> Field </div>
-            <div class='key-type' style='font-family:var(--font-regular); font-weight:bold; color:var(--fg);'> Type </div>
-            <div class='key-descr' style='font-family:var(--font-regular); font-weight:bold; color:var(--fg);'> Description </div>
+        <span part="schema-description" class='m-markdown' style="margin-bottom:8px;"> ${unsafeHTML(marked(this.data?.['::description'] || ''))} </span>
+        <div class="wrapper">
+          <div class="header">
+            <div class='key'>Поле</div>
+            <div class='key-type'>Тип</div>
+            <div class='key-descr'>Описание</div>
           </div>
           ${this.data
             ? html`
@@ -160,7 +206,7 @@ export default class SchemaTable extends LitElement {
 
     const newSchemaLevel = data['::type']?.startsWith('xxx-of') ? schemaLevel : (schemaLevel + 1);
     const newIndentLevel = dataType === 'xxx-of-option' || data['::type'] === 'xxx-of-option' || key.startsWith('::OPTION') ? indentLevel : (indentLevel + 1);
-    const leftPadding = 16 * newIndentLevel; // 2 space indentation at each level
+    const leftPadding = 8 + 16 * (newIndentLevel - 1); // 2 space indentation at each level
     if (Object.keys(data).length === 0) {
       return html`<span class="td key object" style='padding-left:${leftPadding}px'>${key}</span>`;
     }
@@ -198,7 +244,7 @@ export default class SchemaTable extends LitElement {
       return html`
         ${newSchemaLevel >= 0 && key
           ? html`
-            <div class='tr ${newSchemaLevel <= this.schemaExpandLevel ? 'expanded' : 'collapsed'} ${data['::type']}' data-obj='${keyLabel}' title="${data['::deprecated'] ? 'Deprecated' : ''}">
+        <div class='tr ${newSchemaLevel <= this.schemaExpandLevel ? 'expanded' : 'collapsed'} ${data['::type']}' data-obj='${keyLabel}' title="${data['::deprecated'] ? 'Deprecated' : ''}">
               <div class="td key ${data['::deprecated'] ? 'deprecated' : ''}" style='padding-left:${leftPadding}px'>
                 ${(keyLabel || keyDescr)
                   ? html`
@@ -299,8 +345,7 @@ export default class SchemaTable extends LitElement {
           ${deprecated ? html`<span style='color:var(--red);'>✗</span>` : ''}
           ${keyLabel?.endsWith('*')
             ? html`
-              <span class="key-label">${keyLabel.substring(0, keyLabel.length - 1)}</span>
-              <span style='color:var(--red);'>*</span>`
+              <span class="key-label">${keyLabel.substring(0, keyLabel.length - 1)}</span><span style='color:var(--red);'>*</span>`
             : key.startsWith('::OPTION')
               ? html`<span class='xxx-of-key'>${keyLabel}</span><span class="xxx-of-descr">${keyDescr}</span>`
               : html`${keyLabel ? html`<span class="key-label"> ${keyLabel}</span>` : html`<span class="xxx-of-descr">${schemaTitle}</span>`}`
@@ -316,10 +361,10 @@ export default class SchemaTable extends LitElement {
                 : `${descrExpander} ${schemaDescription}`))}
           </span>`
           }
-          ${constraint ? html`<div class='' style='display:inline-block; line-break:anywhere; margin-right:8px;'> <span class='bold-text'>Constraints: </span> ${constraint}</div>` : ''}
-          ${defaultValue ? html`<div style='display:inline-block; line-break:anywhere; margin-right:8px;'> <span class='bold-text'>Default: </span>${defaultValue}</div>` : ''}
-          ${allowedValues ? html`<div style='display:inline-block; line-break:anywhere; margin-right:8px;'> <span class='bold-text'>${type === 'const' ? 'Value' : 'Allowed'}: </span>${allowedValues}</div>` : ''}
-          ${pattern ? html`<div style='display:inline-block; line-break:anywhere; margin-right:8px;'> <span class='bold-text'>Pattern: </span>${pattern}</div>` : ''}
+          ${constraint ? html`<div class='' style='display:inline-block; line-break:anywhere; margin-right:8px;'> <span class='bold-text'>Ограничения: </span> ${constraint}</div>` : ''}
+          ${defaultValue ? html`<div style='display:inline-block; line-break:anywhere; margin-right:8px;'> <span class='bold-text'>По умолчанию: </span>${defaultValue}</div>` : ''}
+          ${allowedValues ? html`<div style='display:inline-block; line-break:anywhere; margin-right:8px;'> <span class='bold-text'>${type === 'const' ? 'Значение' : 'Доступно'}: </span>${allowedValues}</div>` : ''}
+          ${pattern ? html`<div style='display:inline-block; line-break:anywhere; margin-right:8px;'> <span class='bold-text'>Шаблон: </span>${pattern}</div>` : ''}
         </div>
       </div>
     `;

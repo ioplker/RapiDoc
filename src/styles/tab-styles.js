@@ -5,9 +5,8 @@ export default css`
   border: none;
 }
 .tab-buttons {
-  height:30px;
+  flex-wrap: wrap;
   padding: 4px 4px 0 4px;
-  border-bottom: 1px solid var(--light-border-color) ;
   align-items: stretch;
   overflow-y: hidden;
   overflow-x: auto;
@@ -19,19 +18,20 @@ export default css`
 }
 .tab-btn {
   border: none;
-  border-bottom: 3px solid transparent; 
   color: var(--light-fg);
   background-color: transparent;
   white-space: nowrap;
   cursor:pointer;
   outline:none;
-  font-family:var(--font-regular); 
-  font-size:var(--font-size-small);
-  margin-right:16px;
+  font-family:var(--font-regular);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 18px;
+  margin-right:20px;
+  margin-bottom: 8px;
   padding:1px;
 }
 .tab-btn.active {
-  border-bottom: 3px solid var(--primary-color); 
   font-weight:bold;
   color:var(--primary-color);
 }
@@ -43,5 +43,28 @@ export default css`
   margin:-1px 0 0 0;
   position:relative;
   min-height: 50px;
+}
+
+.tab-content:hover .copy-code-btn {
+  display: flex;
+}
+
+.copy-code-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: var(--SURFACE-WHITE-color);
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  padding: 0;
+  margin: 0;
+}
+.copy-code-btn .icon {
+  --STROKE-local: var(--ICON-DARK-color);
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
 }
 `;

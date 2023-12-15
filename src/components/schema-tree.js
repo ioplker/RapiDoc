@@ -102,7 +102,7 @@ export default class SchemaTree extends LitElement {
             ? html`
               <div style="flex:1"></div>
               <div part="schema-toolbar-item schema-multiline-toggle" class='toolbar-item schema-multiline-toggle'> 
-                ${this.schemaDescriptionExpanded === 'true' ? 'Single line description' : 'Multiline description'}
+                ${this.schemaDescriptionExpanded === 'true' ? 'В одну строку' : 'В несколько строк'}
               </div>`
             : ''
           }
@@ -325,10 +325,10 @@ export default class SchemaTree extends LitElement {
               }`
             : ''
           }  
-          ${constraint ? html`<div style='display:inline-block; line-break:anywhere; margin-right:8px'><span class='bold-text'>Constraints: </span>${constraint}</div>` : ''}
-          ${defaultValue ? html`<div style='display:inline-block; line-break:anywhere; margin-right:8px'><span class='bold-text'>Default: </span>${defaultValue}</div>` : ''}
-          ${allowedValues ? html`<div style='display:inline-block; line-break:anywhere; margin-right:8px'><span class='bold-text'>${type === 'const' ? 'Value' : 'Allowed'}: </span>${allowedValues}</div>` : ''}
-          ${pattern ? html`<div style='display:inline-block; line-break: anywhere; margin-right:8px'><span class='bold-text'>Pattern: </span>${pattern}</div>` : ''}
+          ${constraint ? html`<div style='display:inline-block; line-break:anywhere; margin-right:8px'><span class='bold-text'>Ограничения: </span>${constraint}</div>` : ''}
+          ${defaultValue ? html`<div style='display:inline-block; line-break:anywhere; margin-right:8px'><span class='bold-text'>По умолчанию: </span>${defaultValue}</div>` : ''}
+          ${allowedValues ? html`<div style='display:inline-block; line-break:anywhere; margin-right:8px'><span class='bold-text'>${type === 'const' ? 'Значение' : 'Доступно'}: </span>${allowedValues}</div>` : ''}
+          ${pattern ? html`<div style='display:inline-block; line-break: anywhere; margin-right:8px'><span class='bold-text'>Шаблон: </span>${pattern}</div>` : ''}
         </div>
       </div>
     `;
