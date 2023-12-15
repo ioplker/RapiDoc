@@ -116,8 +116,10 @@ export default class ApiRequest extends LitElement {
           display: flex;
           flex-direction: column;
           gap: 8px;
-          border-bottom: solid 1px var(--SURFACE-LIGHT-GREY-color);
+        }
+        .param:not(:last-child) {
           padding-bottom: 20px;
+          border-bottom: solid 1px var(--SURFACE-LIGHT-GREY-color);
         }
         .param-title {
           display: flex;
@@ -767,7 +769,7 @@ export default class ApiRequest extends LitElement {
                     data-ptype = "${reqBody.mimeType}" 
                     data-example = "${v.exampleFormat === 'text' ? v.exampleValue : JSON.stringify(v.exampleValue, null, 2)}"
                     data-example-format = "${v.exampleFormat}"
-          style="width:100%; resize:vertical; border-radius:8px;"
+                    style="width:100%; resize:vertical; border-radius:8px;"
                     .textContent = "${this.fillRequestFieldsWithExample === 'true' ? (v.exampleFormat === 'text' ? v.exampleValue : JSON.stringify(v.exampleValue, null, 2)) : ''}"
                     @input=${(e) => {
                       const requestPanelEl = this.getRequestPanel(e);
