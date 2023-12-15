@@ -23,6 +23,11 @@ export default css`
   display:flex;
 }
 .endpoint-head .collapse-btns .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.endpoint-head .collapse-btns .icon {
   --STROKE-local: var(--ICON-GREY-color);
   width: 24px;
   height: 24px;
