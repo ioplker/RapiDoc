@@ -165,7 +165,6 @@ export default class RapiDoc extends LitElement {
         overflow: hidden;
         letter-spacing:normal;
         color:var(--fg);
-        background-color:var(--bg);
         font-family:var(--font-regular);
       }
       :where(button, input[type="checkbox"], [tabindex="0"]):focus-visible { box-shadow: var(--focus-shadow); }
@@ -191,7 +190,7 @@ export default class RapiDoc extends LitElement {
       .main-content-inner--view-mode {
         max-width: var(--MAX-CONTENT-WIDTH-size);
         margin: 0 auto;
-        padding: 0 20px;
+        padding: 0;
       }
       .main-content::-webkit-scrollbar {
         width: 8px;
@@ -210,7 +209,7 @@ export default class RapiDoc extends LitElement {
       .section-gap,
       .section-gap--focused-mode,
       .section-gap--read-mode { 
-        padding: 0px 4px; 
+        padding: 0;
       }
       .section-tag-header {
         position:relative;
@@ -235,7 +234,7 @@ export default class RapiDoc extends LitElement {
       .section-tag .section-tag-header {
         border: solid 1px;
         border-bottom: none;
-        border-radius: 8px 8px 0 0;
+        border-radius: var(--BORDER-RADIUS-size);
         border-color: transparent;
       }
 
@@ -243,15 +242,10 @@ export default class RapiDoc extends LitElement {
         border-color: var(--SURFACE-BACKGROUND-color);
       }
 
-      .section-tag.expanded .section-tag-header:hover + .section-tag-body {
-        border-color: var(--SURFACE-BACKGROUND-color);
-      }
-
       .section-tag .section-tag-body {
         border: solid 1px;
         border-top: none;
         border-color: transparent;
-        border-radius: 0 0 8px 8px;
       }
 
       .collapsed .section-tag-body {

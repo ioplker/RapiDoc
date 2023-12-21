@@ -193,12 +193,12 @@ export default function endpointTemplate(showExpandCollapse = true, showTags = t
   return html`
     ${showExpandCollapse
       ? html`
-        <div style="display:flex; justify-content:flex-end;"> 
-          <span @click="${(e) => onExpandCollapseAll(e, 'expand-all')}" style="color:var(--primary-color); cursor:pointer;">
-            Свернуть все
-          </span> 
-          &nbsp;|&nbsp; 
+        <div style="display:none; justify-content:flex-end;">
           <span @click="${(e) => onExpandCollapseAll(e, 'collapse-all')}" style="color:var(--primary-color); cursor:pointer;" >
+            Свернуть все
+          </span>
+          &nbsp;|&nbsp;
+          <span @click="${(e) => onExpandCollapseAll(e, 'expand-all')}" style="color:var(--primary-color); cursor:pointer;">
             Развернуть все
           </span> 
           &nbsp; разделы
