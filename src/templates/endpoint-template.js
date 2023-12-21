@@ -195,13 +195,13 @@ export default function endpointTemplate(showExpandCollapse = true, showTags = t
       ? html`
         <div style="display:flex; justify-content:flex-end;"> 
           <span @click="${(e) => onExpandCollapseAll(e, 'expand-all')}" style="color:var(--primary-color); cursor:pointer;">
-            Expand all
+            Свернуть все
           </span> 
           &nbsp;|&nbsp; 
           <span @click="${(e) => onExpandCollapseAll(e, 'collapse-all')}" style="color:var(--primary-color); cursor:pointer;" >
-            Collapse all
+            Развернуть все
           </span> 
-          &nbsp; sections
+          &nbsp; разделы
         </div>`
       : ''
     }
