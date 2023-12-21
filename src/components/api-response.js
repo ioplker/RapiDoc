@@ -231,7 +231,7 @@ export default class ApiResponse extends LitElement {
 
   mimeTypeDropdownTemplate(mimeTypes) {
     return html`
-      <select aria-label='mime types' @change="${(e) => { this.selectedMimeType = e.target.value; }}" style='margin-bottom: -1px; z-index:1'>
+      <select aria-label='mime types' @change="${(e) => { this.selectedMimeType = e.target.value; }}" style='z-index:1'>
         ${mimeTypes.map((mimeType) => html`<option value='${mimeType}' ?selected = '${mimeType === this.selectedMimeType}'> ${mimeType} </option>`)}
       </select>`;
   }

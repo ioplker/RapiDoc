@@ -740,7 +740,7 @@ export default class ApiRequest extends LitElement {
               ${reqBodyExamples.length === 1
                 ? ''
                 : html`
-                  <select style="min-width:100px; max-width:100%;  margin-bottom:-1px;" @change='${(e) => this.onSelectExample(e)}'>
+                  <select style="min-width:100px; max-width:100%;" @change='${(e) => this.onSelectExample(e)}'>
                     ${reqBodyExamples.map((v) => html`<option value="${v.exampleId}" ?selected=${v.exampleId === this.selectedRequestBodyExample} > 
                       ${v.exampleSummary.length > 80 ? v.exampleId : v.exampleSummary ? v.exampleSummary : v.exampleId} 
                     </option>`)}
