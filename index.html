@@ -18,40 +18,74 @@
   });
 </script>
 
-<body>
-<!-- 
-    Some sample spec to try
-    https://api.apis.guru/v2/specs/stripe.com/2019-02-19/swagger.json 
-    https://api.apis.guru/v2/specs/github.com/v3/swagger.json
-    https://api.apis.guru/v2/specs/bitbucket.org/2.0/swagger.json
-    https://petstore.swagger.io/v2/swagger.json
-    https://assets.zuora.com/zuora-documentation/swagger.yaml <<< Large spec with lot of markdown
-    ./specs/petstore_anyof.yaml <<< contains complex one-of with inline primitives and recursive objects
-    ./specs/oneof1.yaml  <<< nested oneof
-    https://cesdev.eng.sonicwall.com/api/q/openapi
--->
-<rapi-doc 
-  spec-url = "./specs/temp.yaml" 
-  id="thedoc" 
-  theme = "dark"
-  render-style="view" 
-  schema-style="table"
-  show-method-in-nav-bar = "true"
-  use-path-in-nav-bar = "true"
-  show-components = "true"
-  show-info = "true"
-  show-header = "true"
-  allow-search = "false"  
-  allow-advanced-search = "true"
-  allow-spec-url-load="false"
-  allow-spec-file-download="true"
-  allow-server-selection = "true"
-  allow-authentication	= "true"
-  update-route="false"
-  match-type="regex"
-  persist-auth="true"
-  scroll-behavior="smooth"
-></rapi-doc>
+<body style="margin: 0;">
+  <!--
+       Some sample spec to try
+       https://api.apis.guru/v2/specs/stripe.com/2019-02-19/swagger.json
+       https://api.apis.guru/v2/specs/github.com/v3/swagger.json
+       https://api.apis.guru/v2/specs/bitbucket.org/2.0/swagger.json
+       https://petstore.swagger.io/v2/swagger.json
+       https://assets.zuora.com/zuora-documentation/swagger.yaml <<< Large spec with lot of markdown
+       ./specs/petstore_anyof.yaml <<< contains complex one-of with inline primitives and recursive objects
+       ./specs/oneof1.yaml  <<< nested oneof
+       https://cesdev.eng.sonicwall.com/api/q/openapi
+  -->
+  <div
+    class="wrapper"
+    style="
+           display: flex;
+           justify-content: center;
+           padding: 40px 0 40px 0;
+           margin: 0;
+           background: #c8c8c8;
+           min-height: 100vh;
+  ">
+    <div
+      class="content"
+      style="
+             padding: 10px;
+             background: white;
+             max-width: 100%;
+    ">
+      <rapi-doc
+        spec-url = "./specs/moneta.yaml"
+        id="thedoc"
+
+        theme="light"
+        primary-color="#1182C2"
+        regular-font="Wix Madefor Display"
+        font-size="largest"
+
+        layout="column"
+        render-style="view"
+        show-header="false"
+        allow-authentication="false"
+        allow-server-selection="false"
+        allow-try="false"
+
+        schema-style="table"
+        schema-description-expanded="true"
+        default-schema-tab="schema"
+      ></rapi-doc>
+      <!-- <rapi-doc-mini
+           spec-url = "./specs/moneta.yaml"
+           id = "thedoc"
+
+           theme="light"
+           primary-color="#1182C2"
+           regular-font="Wix Madefor Display"
+           font-size="largest"
+
+           layout="column"
+           render-style="view"
+           show-header="false"
+           allow-try="false"
+           schema-style="table"
+           schema-description-expanded="true"
+           default-schema-tab="schema"
+           ></rapi-doc-mini> -->
+    </div>
+  </div>
 <!--
   <rapi-doc-mini
     style= "width:600px; padding:0 10px"
