@@ -172,7 +172,7 @@ export default class ApiResponse extends LitElement {
       ${Object.keys(this.responses).map((status) => html`
         <div style = 'display: ${status === this.selectedStatus ? 'block' : 'none'}' >
           <div class="top-gap">
-            <span class="resp-descr m-markdown ">${unsafeHTML(marked(this.responses[status]?.description || ''))}</span>
+            <span class="highlightable resp-descr m-markdown ">${unsafeHTML(marked(this.responses[status]?.description || ''))}</span>
             ${(this.headersForEachRespStatus[status] && this.headersForEachRespStatus[status]?.length > 0)
               ? html`${this.responseHeaderListTemplate(this.headersForEachRespStatus[status])}`
               : ''
@@ -308,6 +308,7 @@ export default class ApiResponse extends LitElement {
       ${this.schemaStyle === 'table'
         ? html`
           <schema-table
+            class="highlightable-shadow"
             .data = "${mimeRespDetails.schemaTree}"
             schema-expand-level = "${this.schemaExpandLevel}"
             schema-description-expanded = "${this.schemaDescriptionExpanded}"
@@ -318,6 +319,7 @@ export default class ApiResponse extends LitElement {
           > </schema-table> `
         : html`
           <schema-tree
+            class="highlightable-shadow"
             .data = '${mimeRespDetails.schemaTree}'
             schema-expand-level = "${this.schemaExpandLevel}"
             schema-description-expanded = "${this.schemaDescriptionExpanded}"

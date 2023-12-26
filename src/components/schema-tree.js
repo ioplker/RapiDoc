@@ -107,7 +107,7 @@ export default class SchemaTree extends LitElement {
             : ''
           }
         </div>
-        <span part="schema-description" class='m-markdown'> ${unsafeHTML(marked(this.data?.['::description'] || ''))}</span>
+        <span part="schema-description" class='highlightable m-markdown'> ${unsafeHTML(marked(this.data?.['::description'] || ''))}</span>
         ${this.data
           ? html`
             ${this.generateTree(

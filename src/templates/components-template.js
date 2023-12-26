@@ -14,6 +14,7 @@ function schemaBodyTemplate(sComponent) {
   ${this.schemaStyle === 'table'
     ? html`
       <schema-table
+        class="highlightable-shadow"
         .data = '${schemaInObjectNotation(sComponent.component, {})}'
         schema-expand-level = "${this.schemaExpandLevel}"
         schema-description-expanded = "${this.schemaDescriptionExpanded}"
@@ -24,6 +25,7 @@ function schemaBodyTemplate(sComponent) {
       > </schema-table>`
     : html`
       <schema-tree
+        class="highlightable-shadow"
         .data = '${schemaInObjectNotation(sComponent.component, {})}'
         schema-expand-level = "${this.schemaExpandLevel}"
         schema-description-expanded = "${this.schemaDescriptionExpanded}"

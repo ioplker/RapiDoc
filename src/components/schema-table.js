@@ -148,7 +148,7 @@ export default class SchemaTable extends LitElement {
             : ''
           }
         </div>
-        <span part="schema-description" class='m-markdown' style="margin-bottom:8px;"> ${unsafeHTML(marked(this.data?.['::description'] || ''))} </span>
+        <span part="schema-description" class='highlightable m-markdown' style="margin-bottom:8px;"> ${unsafeHTML(marked(this.data?.['::description'] || ''))} </span>
         <div class="wrapper">
           <div class="header">
             <div class='key'>Поле</div>
@@ -280,7 +280,7 @@ export default class SchemaTable extends LitElement {
               : ''
             }`
         }
-        <div class='object-body'>
+        <div class='highlightable object-body'>
         ${Array.isArray(data) && data[0]
           ? html`${this.generateTree(data[0], 'xxx-of-option', '', '::ARRAY~OF', '', newSchemaLevel, newIndentLevel, '')}`
           : html`

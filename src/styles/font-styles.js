@@ -4,11 +4,12 @@ export default css`
   .hover-bg:hover{
     background: var(--bg3);
   }
-  ::selection {
-    background: var(--selection-bg);
-    color: var(--selection-fg);
+  ::selection, mark {
+    color: var(--SURFACE-BLUE-color);
+    background: var(--SURFACE-LIGHT-BLUE-color);
+    -webkit-text-fill-color: var(--SURFACE-BLUE-color);
   }
-  .regular-font{ 
+  .regular-font{
     font-family:var(--font-regular); 
   }
   .mono-font { 

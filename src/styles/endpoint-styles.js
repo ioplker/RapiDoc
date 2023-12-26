@@ -19,8 +19,8 @@ export default css`
   font-weight:600;
   align-items: center;
   overflow-wrap: break-word;
-  word-break: break-all;
   display:flex;
+  text-align: right;
 }
 .endpoint-head .collapse-btns .icon {
   display: flex;
@@ -116,6 +116,10 @@ export default css`
 
 .m-endpoint > .endpoint-head.expanded{
   border-radius: 8px 8px 0 0;
+}
+
+.m-endpoint > .endpoint-head.collapsed + .endpoint-body{
+  display: none;
 }
 
 .m-endpoint > .endpoint-head.deprecated:hover {

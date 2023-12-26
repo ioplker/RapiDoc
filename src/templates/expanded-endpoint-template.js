@@ -116,7 +116,7 @@ export function expandedEndpointBodyTemplate(path, tagName = '', tagDescription 
       ${codeSampleTabPanel}
       <div class='expanded-req-resp-container'>
         <api-request
-          class = "${this.renderStyle}-mode"
+          class = "${this.renderStyle}-mode highlightable-shadow"
           style = "width:100%;"
           webhook = "${path.isWebhook}"
           method = "${path.method}"
@@ -148,7 +148,7 @@ export function expandedEndpointBodyTemplate(path, tagName = '', tagDescription 
         ${path.callbacks ? callbackTemplate.call(this, path.callbacks) : ''}
 
         <api-response
-          class = "${this.renderStyle}-mode"
+          class = "${this.renderStyle}-mode highlightable-shadow"
           style = "width:100%;"
           webhook = "${path.isWebhook}"
           .responses = "${path.responses}"

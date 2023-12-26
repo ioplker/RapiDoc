@@ -21,7 +21,7 @@ export default function callbackTemplate(callbacks) {
                   </div>  
                   <div class='expanded-req-resp-container'>
                     <api-request
-                      class = "${this.renderStyle}-mode callback"  
+                      class = "${this.renderStyle}-mode callback highlightable-shadow"
                       style = "width:100%;"
                       callback = "true"
                       method = "${method[0] || ''}", 
@@ -46,7 +46,7 @@ export default function callbackTemplate(callbacks) {
 
                     <api-response
                       style = "width:100%;"
-                      class = "${this.renderStyle}-mode"
+                      class = "${this.renderStyle}-mode highlightable-shadow"
                       callback = "true"
                       .responses="${method[1]?.responses}"
                       render-style="${this.renderStyle}"

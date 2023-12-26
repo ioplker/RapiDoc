@@ -10,6 +10,11 @@ export default function codeSamplesTemplate(xCodeSamples) {
   <div class="tab-panel col code-samples"
     @click="${
       (e) => {
+        if (e.target.parentElement.classList.contains('tab-btn')) {
+          e.target.parentElement.click();
+          return;
+        }
+
         if (!e.target.classList.contains('tab-btn')) { return; }
         const clickedTab = e.target.dataset.tab;
 

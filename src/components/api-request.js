@@ -310,7 +310,7 @@ export default class ApiRequest extends LitElement {
       <a
         part="anchor anchor-param-example"
         style="display:inline-block; min-width:24px; text-align:center"
-        class="${this.allowTry === 'true' ? '' : 'inactive-link'}"
+        class="highlightable ${this.allowTry === 'true' ? '' : 'inactive-link'}"
         data-example-type="${paramType === 'array' ? paramType : 'string'}"
         data-example="${example.value && Array.isArray(example.value) ? example.value?.join('~|~') : (typeof example.value === 'object' ? JSON.stringify(example.value, null, 2) : example.value) || ''}"
         title="${example.value && Array.isArray(example.value) ? example.value?.join('~|~') : (typeof example.value === 'object' ? JSON.stringify(example.value, null, 2) : example.value) || ''}"
@@ -336,8 +336,8 @@ export default class ApiRequest extends LitElement {
       ${exampleList.map((v) => html`
           <li>
             ${this.renderExample(v, paramType, paramName)}
-            ${v.summary?.length > 0 ? html`<span>&lpar;${v.summary}&rpar;</span>` : ''}
-            ${v.description?.length > 0 ? html`<p>${unsafeHTML(marked(v.description))}</p>` : ''}
+            ${v.summary?.length > 0 ? html`<span class="highlightable">&lpar;${v.summary}&rpar;</span>` : ''}
+            ${v.description?.length > 0 ? html`<p class="highlightable">${unsafeHTML(marked(v.description))}</p>` : ''}
           </li>
         `)}
     </ul>`;
@@ -427,7 +427,7 @@ export default class ApiRequest extends LitElement {
       const labelColWidth = 'read focused'.includes(this.renderStyle) ? '200px' : '160px';
       params.push(html`
         <div class="param">
-          <div class="param-title">
+          <div class="highlightable param-title">
             <div class="param-name ${param.deprecated ? 'deprecated' : ''}" >
               ${param.deprecated ? html`<span style='color:var(--red);'>✗</span>` : ''}
               ${param.required ? html`<span style='color:var(--primary-color)'>*</span>` : ''}
@@ -446,13 +446,13 @@ export default class ApiRequest extends LitElement {
             ? html`
             <div>
               <div class="param-constraint">
-                ${paramSchema.default ? html`<span style="font-weight:bold">По умолчанию: </span>${paramSchema.default}<br/>` : ''}
-                ${paramSchema.pattern ? html`<span style="font-weight:bold">Шаблон: </span>${paramSchema.pattern}<br/>` : ''}
-                ${paramSchema.constrain ? html`${paramSchema.constrain}<br/>` : ''}
+                ${paramSchema.default ? html`<span style="font-weight:bold">По умолчанию: </span><span class="highlightable">${paramSchema.default}</span><br/>` : ''}
+                ${paramSchema.pattern ? html`<span style="font-weight:bold">Шаблон: </span><span class="highlightable">${paramSchema.pattern}</span><br/>` : ''}
+                ${paramSchema.constrain ? html`<span class="highlightable">${paramSchema.constrain}</span><br/>` : ''}
                 ${paramSchema.allowedValues && paramSchema.allowedValues.split('┃').map((v, i) => html`
                   ${i > 0 ? '' : html`<span>Доступно: </span>`}
                   ${html`
-                    <a part="anchor anchor-param-constraint" class="inactive-link"
+                    <a part="anchor anchor-param-constraint" class="highlightable inactive-link"
                       data-type="${paramSchema.type === 'array' ? paramSchema.type : 'string'}"
                       data-enum="${v.trim()}"
                       @click="${(e) => {
@@ -472,7 +472,7 @@ export default class ApiRequest extends LitElement {
           : ''
         }
           <div colspan="2" style="border:none">
-            <span class="m-markdown-small">${unsafeHTML(marked(param.description || ''))}</span>
+            <span class="highlightable m-markdown-small">${unsafeHTML(marked(param.description || ''))}</span>
             ${this.exampleListTemplate.call(this, param.name, paramSchema.type, example.exampleList)}
           </div>
         </div>
@@ -815,7 +815,7 @@ export default class ApiRequest extends LitElement {
           reqBodySchemaHtml = html`
             ${reqBodySchemaHtml}
             <schema-table
-              class = '${reqBody.mimeType.substring(reqBody.mimeType.indexOf('/') + 1)}'
+              class = '${reqBody.mimeType.substring(reqBody.mimeType.indexOf('/') + 1)} highlightable-shadow'
               style = 'display: ${this.selectedRequestBodyType === reqBody.mimeType ? 'block' : 'none'};'
               .data = '${schemaAsObj}'
               schema-expand-level = "${this.schemaExpandLevel}"
@@ -830,7 +830,7 @@ export default class ApiRequest extends LitElement {
           reqBodySchemaHtml = html`
             ${reqBodySchemaHtml}
             <schema-tree
-              class = "${reqBody.mimeType.substring(reqBody.mimeType.indexOf('/') + 1)}"
+              class = "${reqBody.mimeType.substring(reqBody.mimeType.indexOf('/') + 1)} highlightable-shadow"
               style = "display: ${this.selectedRequestBodyType === reqBody.mimeType ? 'block' : 'none'};"
               .data = "${schemaAsObj}"
               schema-expand-level = "${this.schemaExpandLevel}"
@@ -929,6 +929,7 @@ export default class ApiRequest extends LitElement {
       ${html`
         <div class="tab-content col" data-tab = 'schema' style="display:${this.activeSchemaTab !== 'example' ? 'block' : 'none'}; padding-left:5px; width:100%;"> 
           <schema-tree
+            class="highlightable-shadow"
             .data = '${formdataPartSchema}'
             schema-expand-level = "${this.schemaExpandLevel}"
             schema-description-expanded = "${this.schemaDescriptionExpanded}"

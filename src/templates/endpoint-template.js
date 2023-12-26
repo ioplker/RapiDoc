@@ -50,7 +50,7 @@ function endpointHeadTemplate(path, pathsExpanded = false) {
   return html`
   <summary @click="${(e) => { toggleExpand.call(this, path, e); }}" part="section-endpoint-head-${path.expanded ? 'expanded' : 'collapsed'}" class='endpoint-head ${path.method} ${path.deprecated ? 'deprecated' : ''} ${pathsExpanded || path.expanded ? 'expanded' : 'collapsed'}'>
     <div part="section-endpoint-head-method" class="method ${path.method} ${path.deprecated ? 'deprecated' : ''}"> ${icon} ${path.method} </div>
-    <div  part="section-endpoint-head-path" class="path ${path.deprecated ? 'deprecated' : ''}"> 
+    <div part="section-endpoint-head-path" class="highlightable path ${path.deprecated ? 'deprecated' : ''}">
       ${prettyPath}
       ${path.isWebhook ? html`<span style="font-family: var(--font-regular); font-size: var(--); font-size: var(--font-size-small); color:var(--primary-color); margin-left: 16px"> Webhook</span>` : ''}
     </div>
@@ -64,7 +64,7 @@ function endpointHeadTemplate(path, pathsExpanded = false) {
     ${this.showSummaryWhenCollapsed
       ? html`
         <div style="min-width:60px; flex:1"></div>
-        <div part="section-endpoint-head-description" class="descr">${path.summary || path.shortSummary} </div>
+        <div part="section-endpoint-head-description" class="highlightable descr">${path.summary || path.shortSummary} </div>
         <div class="collapse-btns">
           <svg class="icon open" style="stroke: var(--STROKE-local);" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g><path d="M19 9L12 16L5 9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
           <svg class="icon close" style="stroke: var(--STROKE-local);" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g><path d="M5 16L12 9L19 16" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
@@ -75,7 +75,7 @@ function endpointHeadTemplate(path, pathsExpanded = false) {
   `;
 }
 
-function endpointBodyTemplate(path) {
+function endpointBodyTemplate(path, isExpanded) {
   const acceptContentTypes = new Set();
   for (const respStatus in path.responses) {
     for (const acceptContentType in (path.responses[respStatus]?.content)) {
@@ -94,8 +94,8 @@ function endpointBodyTemplate(path) {
 
   const codeSampleTabPanel = path.xCodeSamples ? codeSamplesTemplate(path.xCodeSamples) : '';
   return html`
-  <div part="section-endpoint-body-${path.expanded ? 'expanded' : 'collapsed'}" class='endpoint-body ${path.method} ${path.deprecated ? 'deprecated' : ''}'>
-    <div class="summary">
+  <div part="section-endpoint-body-${isExpanded || path.expanded ? 'expanded' : 'collapsed'}" class='endpoint-body ${path.method} ${path.deprecated ? 'deprecated' : ''}'>
+    <div class="summary highlightable">
       ${path.summary
         ? html`<div class="title" part="section-endpoint-body-title">${path.summary}<div>`
         : path.shortSummary !== path.description
@@ -134,7 +134,7 @@ function endpointBodyTemplate(path) {
     <div class='req-resp-container'> 
       <div style="display:flex; flex-direction:column" class="view-mode-request ${this.layout}-layout">
         <api-request
-          class = "${this.renderStyle}-mode ${this.layout}-layout"
+          class = "${this.renderStyle}-mode ${this.layout}-layout highlightable-shadow"
           style = "width:100%;"
           webhook = "${path.isWebhook}"
           method = "${path.method}"
@@ -167,7 +167,7 @@ function endpointBodyTemplate(path) {
         </div>  
 
         <api-response
-          class = "${this.renderStyle}-mode"
+          class = "${this.renderStyle}-mode highlightable-shadow"
           style = "width:100%;"
           webhook = "${path.isWebhook}"
           .responses="${path.responses}"
@@ -210,7 +210,7 @@ export default function endpointTemplate(showExpandCollapse = true, showTags = t
         ? html` 
           <div class='regular-font section-gap section-tag ${tag.expanded ? 'expanded' : 'collapsed'}'> 
             <div class='section-tag-header' @click="${() => { tag.expanded = !tag.expanded; this.requestUpdate(); }}">
-              <div id='${tag.elementId}' class="sub-title tag" style="color:var(--primary-color)">${tag.name}</div>
+              <div id='${tag.elementId}' class="highlightable sub-title tag" style="color:var(--primary-color)">${tag.name}</div>
               <svg class="icon open" style="stroke: var(--STROKE-local);" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g><path d="M19 9L12 16L5 9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
               <svg class="icon close" style="stroke: var(--STROKE-local);" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g><path d="M5 16L12 9L19 16" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
             </div>
@@ -230,7 +230,7 @@ export default function endpointTemplate(showExpandCollapse = true, showTags = t
                     <div class="bg"></div>
                   </div>
                   ${endpointHeadTemplate.call(this, path, pathsExpanded)}      
-                  ${pathsExpanded || path.expanded ? endpointBodyTemplate.call(this, path) : ''}
+                  ${endpointBodyTemplate.call(this, path, pathsExpanded || path.expanded)}
                 </section>`)
               }
             </div>
@@ -245,7 +245,7 @@ export default function endpointTemplate(showExpandCollapse = true, showTags = t
             }).map((path) => html`
             <section id='${path.elementId}' class='m-endpoint regular-font ${path.method} ${pathsExpanded || path.expanded ? 'expanded' : 'collapsed'}'>
               ${endpointHeadTemplate.call(this, path, pathsExpanded)}      
-              ${pathsExpanded || path.expanded ? endpointBodyTemplate.call(this, path) : ''}
+              ${endpointBodyTemplate.call(this, path, pathsExpanded || path.expanded)}
             </section>`)
           }
           </div>
