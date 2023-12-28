@@ -427,8 +427,8 @@ export default class ApiRequest extends LitElement {
       const labelColWidth = 'read focused'.includes(this.renderStyle) ? '200px' : '160px';
       params.push(html`
         <div class="param">
-          <div class="highlightable param-title">
-            <div class="param-name ${param.deprecated ? 'deprecated' : ''}" >
+          <div class="param-title">
+            <div class="highlightable param-name ${param.deprecated ? 'deprecated' : ''}" >
               ${param.deprecated ? html`<span style='color:var(--red);'>✗</span>` : ''}
               ${param.required ? html`<span style='color:var(--primary-color)'>*</span>` : ''}
               ${param.name}
