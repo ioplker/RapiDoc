@@ -160,8 +160,11 @@ export default class SchemaTree extends LitElement {
     }
     let keyLabel = '';
     let keyDescr = '';
-    if (key.startsWith('::ONE~OF') || key.startsWith('::ANY~OF')) {
-      keyLabel = key.replace('::', '').replace('~', ' ');
+
+    if (key.startsWith('::ONE~OF')) {
+      keyLabel = key.replace('::ONE~OF', 'Одно из');
+    } else if (key.startsWith('::ANY~OF')) {
+      keyLabel = key.replace('::ANY~OF', 'Несколько из');
     } else if (key.startsWith('::OPTION')) {
       const parts = key.split('~');
       [, keyLabel, keyDescr] = parts;

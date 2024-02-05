@@ -213,8 +213,11 @@ export default class SchemaTable extends LitElement {
     let keyLabel = '';
     let keyDescr = '';
     let isOneOfLabel = false;
-    if (key.startsWith('::ONE~OF') || key.startsWith('::ANY~OF')) {
-      keyLabel = key.replace('::', '').replace('~', ' ');
+    if (key.startsWith('::ONE~OF')) {
+      keyLabel = key.replace('::ONE~OF', 'Одно из');
+      isOneOfLabel = true;
+    } else if (key.startsWith('::ANY~OF')) {
+      keyLabel = key.replace('::ANY~OF', 'Несколько из');
       isOneOfLabel = true;
     } else if (key.startsWith('::OPTION')) {
       const parts = key.split('~');
