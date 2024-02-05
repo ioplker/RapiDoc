@@ -6,6 +6,18 @@ import SchemaStyles from '~/styles/schema-styles';
 import BorderStyles from '~/styles/border-styles';
 import CustomStyles from '~/styles/custom-styles';
 
+function getSortedProperties(data) {
+  const properties = Object.keys(data);
+
+  const srcOrderedProperties = properties.sort((a, b) => {
+    const aValue = String(data[a]).includes('~|~') ? Number(data[a].split('~|~').slice(-1)) : data[a]['::x-index'];
+    const bValue = String(data[b]).includes('~|~') ? Number(data[b].split('~|~').slice(-1)) : data[b]['::x-index'];
+    return aValue - bValue;
+  });
+
+  return srcOrderedProperties;
+}
+
 export default class SchemaTree extends LitElement {
   static get properties() {
     return {
@@ -235,8 +247,8 @@ export default class SchemaTree extends LitElement {
           ${Array.isArray(data) && data[0]
             ? html`${this.generateTree(data[0], 'xxx-of-option', '', '::ARRAY~OF', '', newSchemaLevel, newIndentLevel, data[0]['::readwrite'])}`
             : html`
-              ${Object.keys(data).map((dataKey) => html`
-                ${['::title', '::description', '::type', '::props', '::deprecated', '::array-type', '::readwrite', '::dataTypeLabel', '::nullable'].includes(dataKey)
+              ${getSortedProperties(data).map((dataKey) => html`
+                ${['::title', '::description', '::type', '::props', '::deprecated', '::array-type', '::readwrite', '::dataTypeLabel', '::nullable', '::x-index'].includes(dataKey)
                   ? data[dataKey]['::type'] === 'array' || data[dataKey]['::type'] === 'object'
                     ? html`${this.generateTree(
                       data[dataKey]['::type'] === 'array' ? data[dataKey]['::props'] : data[dataKey],
@@ -273,7 +285,7 @@ export default class SchemaTree extends LitElement {
 
     // For Primitive types and array of Primitives
     // eslint-disable-next-line no-unused-vars
-    const [type, primitiveReadOrWrite, constraint, defaultValue, allowedValues, pattern, schemaDescription, schemaTitle, deprecated] = data.split('~|~');
+    const [type, primitiveReadOrWrite, constraint, defaultValue, allowedValues, pattern, schemaDescription, schemaTitle, deprecated, xIndex] = data.split('~|~');
     if (primitiveReadOrWrite === '🆁' && this.schemaHideReadOnly === 'true') {
       return;
     }

@@ -111,7 +111,7 @@ export function getTypeInfo(schema) {
     }
   }
   info.constrain = constrain;
-  info.html = `${info.type}~|~${info.readOrWriteOnly}~|~${info.constrain}~|~${info.default}~|~${info.allowedValues}~|~${info.pattern}~|~${info.description}~|~${schema.title || ''}~|~${info.deprecated ? 'deprecated' : ''}`;
+  info.html = `${info.type}~|~${info.readOrWriteOnly}~|~${info.constrain}~|~${info.default}~|~${info.allowedValues}~|~${info.pattern}~|~${info.description}~|~${schema.title || ''}~|~${info.deprecated ? 'deprecated' : ''}~|~${schema['x-index'] || ''}`;
   return info;
 }
 
@@ -656,6 +656,33 @@ export function schemaInObjectNotation(schema, obj, level = 0, suffix = '') {
   if (!schema) {
     return;
   }
+
+  // `x-index` is a line number from the spec file.
+  // It's quite handy in cases of indexing API content for searching (to sync the results order).
+  // It needs to be written to the final spec (merged from all files).
+  // You can achieve this with a bash-script like:
+  // ```
+  // #!/usr/bin/env bash
+  //
+  // RAW_SPEC_PATH="$(pwd)/openapi_raw.yaml"
+  // SPEC_PATH="$(pwd)/openapi.yaml"
+  //
+  // npx swagger-merger -i "$RAW_SPEC_PATH" -o "$SPEC_PATH"
+  // touch "$SPEC_PATH.tmp"
+  // cat "$SPEC_PATH" \
+  //   | sed 's/^\(\s*\) content:/\1 x-index: ###x-index###\n\1 content:/g' \
+  //   | sed 's/^\(\s*\) schema:/\1 x-index: ###x-index###\n\1 schema:/g' \
+  //   | sed 's/^\(\s*\) type:/\1 x-index: ###x-index###\n\1 type:/g' \
+  //   | awk '{gsub("###x-index###",NR,$0);print}' > "$SPEC_PATH.tmp" \
+  // ```
+  //
+  // If you need to paste indexes before other fields just replace `FIELD_NAME` with desired one
+  // and insert this before `awk` line:
+  // ```
+  //   | sed 's/^\(\s*\) FIELD_NAME:/\1 x-index: ###x-index###\n\1 FIELD_NAME:/g' \
+  // ```
+  obj['::x-index'] = schema['x-index'] || '';
+
   if (schema.allOf) {
     const objWithAllProps = {};
     if (schema.allOf.length === 1 && !schema.allOf[0].properties && !schema.allOf[0].items) {
@@ -757,7 +784,7 @@ export function schemaInObjectNotation(schema, obj, level = 0, suffix = '') {
       // Generate ONE-OF options for complexTypes
       complexTypes.forEach((v, i) => {
         if (v === 'null') {
-          multiTypeOptions[`::OPTION~${i + 1}`] = 'NULL~|~~|~~|~~|~~|~~|~~|~~|~';
+          multiTypeOptions[`::OPTION~${i + 1}`] = 'NULL~|~~|~~|~~|~~|~~|~~|~~|~~|~';
         } else if ('integer, number, string, boolean,'.includes(`${v},`)) {
           subSchema.type = Array.isArray(v) ? v.join('┃') : v;
           const primitiveTypeInfo = getTypeInfo(subSchema);
