@@ -940,7 +940,7 @@ export function generateExample(schema, mimeType, examples = '', example = '', i
           if (!samples[samplesKey]) {
             continue;
           }
-          const summary = samples[samplesKey]['::TITLE'] || `Example ${++i}`;
+          const summary = samples[samplesKey]['::TITLE'] || `Пример ${++i}`;
           const description = samples[samplesKey]['::DESCRIPTION'] || '';
           if (mimeType?.toLowerCase().includes('xml')) {
             exampleValue = `<?xml version="1.0" encoding="UTF-8"?>\n${xmlRootStart}${json2xml(samples[samplesKey], 1)}\n${xmlRootEnd}`;
