@@ -205,7 +205,7 @@ export default class SchemaTable extends LitElement {
     }
 
     const newSchemaLevel = data['::type']?.startsWith('xxx-of') ? schemaLevel : (schemaLevel + 1);
-    const newIndentLevel = dataType === 'xxx-of-option' || data['::type'] === 'xxx-of-option' || key.startsWith('::OPTION') ? indentLevel : (indentLevel + 1);
+    const newIndentLevel = indentLevel + 1;
     const leftPadding = 8 + 16 * (newIndentLevel - 1); // 2 space indentation at each level
     if (Object.keys(data).length === 0) {
       return html`<span class="td key object" style='padding-left:${leftPadding}px'>${key}</span>`;

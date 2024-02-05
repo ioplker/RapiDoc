@@ -177,8 +177,7 @@ export default class SchemaTree extends LitElement {
     let openBracket = '';
     let closeBracket = '';
     const newSchemaLevel = data['::type']?.startsWith('xxx-of') ? schemaLevel : (schemaLevel + 1);
-    // const newIndentLevel = dataType === 'xxx-of-option' || data['::type'] === 'xxx-of-option' ? indentLevel : (indentLevel + 1);
-    const newIndentLevel = dataType === 'xxx-of-option' || data['::type'] === 'xxx-of-option' || key.startsWith('::OPTION') ? indentLevel : (indentLevel + 1);
+    const newIndentLevel = indentLevel + 1;
     if (data['::type'] === 'object') {
       if (dataType === 'array') {
         if (schemaLevel < this.schemaExpandLevel) {
