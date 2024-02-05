@@ -47,7 +47,10 @@ function onExpandCollapseAll(e, action = 'expand-all') {
 /* eslint-disable indent */
 function endpointHeadTemplate(path, pathsExpanded = false) {
   const icon = html`<svg class="icon" style="stroke: var(--STROKE-local);" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 7L20 12L15 17M9 17L4 12L9 7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-  const prettyPath = path.path.split('#')[0];
+  const pathBeforeLabel = path.path.split('#')[0];
+  const pathAfterLabel = path.path.split('#')[1].split('/').length > 1 ? path.path.split('#')[1].split('/').slice(1).join('/') : '';
+  const prettyPath = pathBeforeLabel.slice(-1) === '/' ? `${pathBeforeLabel}${pathAfterLabel}` : `${pathBeforeLabel}/${pathAfterLabel}`;
+
   return html`
   <summary @click="${(e) => { toggleExpand.call(this, path, e); }}" part="section-endpoint-head-${path.expanded ? 'expanded' : 'collapsed'}" class='endpoint-head ${path.method} ${path.deprecated ? 'deprecated' : ''} ${pathsExpanded || path.expanded ? 'expanded' : 'collapsed'}'>
     <div part="section-endpoint-head-method" class="method ${path.method} ${path.deprecated ? 'deprecated' : ''}"> ${icon} ${path.method} </div>
