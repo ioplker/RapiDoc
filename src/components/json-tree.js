@@ -93,10 +93,12 @@ export default class JsonTree extends LitElement {
       }
 
       .json-tree:hover .copy-code-btn {
-        display: flex;
+        opacity: 1;
       }
+
       .copy-code-btn {
-        display: none;
+        opacity: 0;
+        display: flex;
         align-items: center;
         justify-content: center;
         border-radius: 8px;

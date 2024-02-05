@@ -191,14 +191,13 @@ export default class ApiResponse extends LitElement {
                     : html`${this.mimeTypeDropdownTemplate(Object.keys(this.mimeResponsesForEachStatus[status]))}`
                   }
                 </div>
-                ${this.activeSchemaTab === 'example'
-                  ? html`<div class ='tab-content col' style = 'flex:1;'>
-                      ${this.mimeExampleTemplate(this.mimeResponsesForEachStatus[status][this.selectedMimeType])}
-                    </div>`
-                  : html`<div class ='tab-content col' style = 'flex:1;'>
-                      ${this.mimeSchemaTemplate(this.mimeResponsesForEachStatus[status][this.selectedMimeType])}
-                    </div>`
-                }
+
+                <div class ='tab-content col' style = 'flex:1;${this.activeSchemaTab === 'example' ? '' : 'display:none;'}'>
+                    ${this.mimeExampleTemplate(this.mimeResponsesForEachStatus[status][this.selectedMimeType])}
+                </div>
+                <div class ='tab-content col' style = 'flex:1; display: ${this.activeSchemaTab === 'example' ? 'display:none;' : ''}'>
+                    ${this.mimeSchemaTemplate(this.mimeResponsesForEachStatus[status][this.selectedMimeType])}
+                </div>
               </div>
             `
           }`)
