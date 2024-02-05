@@ -20,6 +20,7 @@ function toggleExpand(path) {
       const newHash = `${this.routePrefix || '#'}${path.elementId}`;
       if (window.location.hash !== newHash) {
         this.replaceHistoryState(path.elementId);
+        window.dispatchEvent(new HashChangeEvent('hashchange'));
       }
     }
   }
