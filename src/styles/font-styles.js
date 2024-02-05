@@ -127,8 +127,6 @@ export default css`
 
   .m-markdown-small code,
   .m-markdown code {
-    padding: 1px 6px;
-    border-radius: 2px;
     background-color: var(--SURFACE-LIGHT-YELLOW-color);
     font-family: "IBM Plex Mono";
     font-size: calc(var(--font-size-mono));
@@ -144,45 +142,20 @@ export default css`
     white-space: pre-wrap;
     overflow-x: auto;
     line-height: normal;
-    border-radius: 2px;
-    border: 1px solid var(--code-border-color);
-  }
-
-  .m-markdown pre {
     padding: 12px;
-    background-color: var(--code-bg);
     color:var(--code-fg);
-  }
-
-  .m-markdown-small pre {
-    margin-top: 4px;
-    padding: 2px 4px;
-    background-color: var(--bg3);
-    color: var(--fg2);
-  }
-
-  .m-markdown-small pre code,
-  .m-markdown pre code {
-    border:none;
-    padding:0;
-  }
-
-  .m-markdown pre {
+    border: 1px solid var(--code-border-color);
     background: var(--SURFACE-BACKGROUND-color);
     border-radius: var(--BORDER-RADIUS-size);
   }
+
+  .m-markdown-small pre code,
   .m-markdown pre code {
     color: var(--code-fg);
     font-family: 'IBM Plex Mono';
     font-size: 16px;
     line-height: 22px;
-    background-color: var(--code-bg);
     background-color: transparent;
-  }
-
-  .m-markdown-small pre code {
-    color: var(--fg2);
-    background-color: var(--bg3);
   }
 
   .m-markdown ul,
