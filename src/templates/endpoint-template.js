@@ -166,9 +166,7 @@ function endpointBodyTemplate(path, isExpanded) {
             file-input:file-input, textbox:textbox, textbox-param:textbox-param, textarea:textarea, textarea-param:textarea-param, 
             anchor:anchor, anchor-param-example:anchor-param-example, schema-description:schema-description, schema-multiline-toggle:schema-multiline-toggle"
           > </api-request>
-
-          ${path.callbacks ? callbackTemplate.call(this, path.callbacks) : ''}
-        </div>  
+        </div>
 
         <api-response
           class = "${this.renderStyle}-mode highlightable-shadow"
@@ -188,6 +186,11 @@ function endpointBodyTemplate(path, isExpanded) {
           textbox:textbox, textbox-param:textbox-param, textarea:textarea, textarea-param:textarea-param, anchor:anchor, anchor-param-example:anchor-param-example, btn-clear-resp:btn-clear-resp,
           schema-description:schema-description, schema-multiline-toggle:schema-multiline-toggle"
         > </api-response>
+
+        ${path.callbacks
+          ? html`<div class="view-mode-request">${callbackTemplate.call(this, path.callbacks)}</div>`
+          : ''
+        }
       </div>
   </div>`;
 }
