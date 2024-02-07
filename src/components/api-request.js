@@ -235,9 +235,7 @@ export default class ApiRequest extends LitElement {
   render() {
     return html`
     <div class="col regular-font request-panel ${'read focused'.includes(this.renderStyle) || this.callback === 'true' ? 'read-mode' : 'view-mode'}">
-      <div class=" ${this.callback === 'true' ? 'tiny-title' : 'req-res-title'} "> 
-        ${this.callback === 'true' ? 'Callback-запрос' : 'Запрос'}
-      </div>
+      <div class=" ${this.callback === 'true' ? 'tiny-title' : 'req-res-title'} ">Запрос</div>
       <div>
         ${guard([this.method, this.path, this.allowTry, this.parameters, this.activeParameterSchemaTabs], () => this.inputParametersTemplate('path'))}
         ${guard([this.method, this.path, this.allowTry, this.parameters, this.activeParameterSchemaTabs], () => this.inputParametersTemplate('query'))}
